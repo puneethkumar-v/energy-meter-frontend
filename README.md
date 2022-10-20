@@ -1,70 +1,66 @@
-# Getting Started with Create React App
+# Energy Meter FrontEnd Dashboard Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Contribution Guidelines
 
-## Available Scripts
+Clone the repository:
 
-In the project directory, you can run:
+### `git clone https://github.com/puneethkumar-v/energy-meter-frontend.git`
+
+## Change the directory into the project directory:
+
+### `cd energy-meter-frontend`
+
+## Install all the dependencies:
+
+### `npm install`
+
+## Run the start script:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Important:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Once you clone the project repository you will be working on the "main" branch, so create a new branch
 
-### `npm test`
+## Create a new branch:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `git checkout -b newBranchName`
 
-### `npm run build`
+Once you create a new branch, add all the new feature to be added to the project and once done push the changes as below(push to the branch you have created)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Pushing the changes to the branch
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `git push -u origin newBranchName`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+After you have pushed the changes to the branch you have created wait for sometime as the other people to review the changes you have made and ensure that the changes are correct and they will pull the code to the main branch.
 
-### `npm run eject`
+## Todo:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Basic Setup:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [ ] Run the react app using npx
+- [ ] Update the README.md file for contribution
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### UI:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [ ] Clean up the default setup from the project folder
+- [ ] Add Components Folder
+  - [ ] Home Page
+  - [ ] Sign Up Page
+    - [ ] Admin Sign up
+    - [ ] User Sign up
+    - [ ] Tenant Sign up
+  - [ ] Login Page
+    - [ ] Admin Login
+    - [ ] Tenant Login
+    - [ ] User Login
+  - [ ] Main Page
+    - [ ] Sidebar
+      - [ ] Home
+      - [ ] Rule Chain
+      - [ ] Customer
+      - [ ] Assets
+      - [ ] Devices
+      - [ ] Device Profiles
+      - [ ] Dashboard
+      - [ ] System Settings
