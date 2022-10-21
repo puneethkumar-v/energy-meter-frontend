@@ -1,11 +1,11 @@
 import React from "react";
 import Main from "./Main";
-import Sidebar from "./Sidebar";
+import SidebarComponent from "./SidebarComponent";
 
 const Home = () => {
   return (
     <>
-      <Sidebar />
+      <SidebarComponent />
       <Main />
     </>
   );
