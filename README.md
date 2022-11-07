@@ -60,7 +60,9 @@ After you have pushed the changes to the branch you have created wait for someti
       - [ ] Rule Chain
       - [ ] Customer
       - [ ] Assets
-      - [ ] Devices
+      - [*] Devices
+        - [*] Device Table
+          - [*] Device Each Sensor Graph
       - [ ] Device Profiles
       - [ ] Dashboard
       - [ ] System Settings
