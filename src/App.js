@@ -4,13 +4,16 @@ import Home from "./Components/Home";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import { useState } from "react";
+import Devices from "./Components/Devices";
+import Graph from "./Components/Graph";
 // import SidebarComponent from "./Components/Sidebar";
 import Topbar from "./Components/Topbar";
 import Sidebar from "./Components/Sidebar";
-import Devices from "./Components/Devices";
-import Graph from "./Components/Graph";
+// import Devices from "./Components/Devices";
+// import Graph from "./Components/Graph";
 
 function App() {
+  const [auth, SetAuth] = useState(false);
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
 
@@ -20,11 +23,12 @@ function App() {
         <CssBaseline />
 
         <div className="app">
-          <Sidebar isSidebar={isSidebar} />
+          {auth && <Sidebar isSidebar={isSidebar} />}
           <main className="content">
-            <Topbar setIsSidebar={setIsSidebar} />
+            {auth && <Topbar setIsSidebar={setIsSidebar} />}
             <Routes>
               <Route path="/signup" element={<Signup />} />
+              <Route path="/" element={<Home />} />
               <Route path="/devices" element={<Devices />} />
               <Route path="/values" element={<Graph />} />
               {/* <Route path="/login" element={<Login />} /> */}

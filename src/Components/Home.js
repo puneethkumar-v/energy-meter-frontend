@@ -1,12 +1,13 @@
 import React from "react";
-import Main from "./Main";
-import Sidebar from "./Sidebar";
+
+import { useState } from "react";
+import { ColorModeContext, useMode } from "../theme";
 
 const Home = () => {
+  const [theme, colorMode] = useMode();
   return (
     <>
-      <Sidebar />
-      <Main />
+      <h1>Welcome here</h1>
     </>
   );
 };
