@@ -11,6 +11,9 @@ import * as yup from "yup";
 import React from "react";
 import Topbar from "./Topbar";
 import { tokens } from "../theme";
+import { useDispatch } from "react-redux";
+import { useHistory, Link } from "react-router-dom";
+import { signup, signin } from "../../actions/auth";
 
 const Signup = () => {
   const theme = useTheme();
@@ -45,7 +48,7 @@ const Signup = () => {
                 height: "100%",
               }}>
               <Typography variant="h3" color={colors.grey[100]} mb="2rem">
-                Login Form
+                Signup Form
               </Typography>
               <Box
                 display="grid"
@@ -84,7 +87,7 @@ const Signup = () => {
                 <TextField
                   fullWidth
                   variant="filled"
-                  type="text"
+                  type="email"
                   label="Email"
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -92,6 +95,110 @@ const Signup = () => {
                   name="email"
                   error={!!touched.email && !!errors.email}
                   helperText={touched.email && errors.email}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  type="text"
+                  label="First Name"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.firstName}
+                  name="firstName"
+                  error={!!touched.firstName && !!errors.firstName}
+                  helperText={touched.firstName && errors.firstName}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  type="text"
+                  label="Last Name"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.lastName}
+                  name="lastName"
+                  error={!!touched.lastName && !!errors.lastName}
+                  helperText={touched.lastName && errors.lastName}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  type="text"
+                  label="Country"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.country}
+                  name="country"
+                  error={!!touched.country && !!errors.country}
+                  helperText={touched.country && errors.country}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  type="text"
+                  label="State"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.state}
+                  name="state"
+                  error={!!touched.state && !!errors.state}
+                  helperText={touched.state && errors.state}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  type="text"
+                  label="City"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.city}
+                  name="city"
+                  error={!!touched.city && !!errors.city}
+                  helperText={touched.city && errors.city}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  type="text"
+                  label="Zip"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.email}
+                  name="zip"
+                  error={!!touched.zip && !!errors.zip}
+                  helperText={touched.zip && errors.zip}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  type="textarea"
+                  label="Address"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.address}
+                  name="address"
+                  error={!!touched.address && !!errors.address}
+                  helperText={touched.address && errors.address}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  type="tel"
+                  label="contact_number"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.contact_number}
+                  name="contact_number"
+                  error={!!touched.contact_number && !!errors.contact_number}
+                  helperText={touched.contact_number && errors.contact_number}
                   sx={{ gridColumn: "span 4" }}
                 />
                 <TextField
@@ -149,7 +256,7 @@ const Signup = () => {
               </Box>
               <Box display="flex" justifyContent="end" mt="20px">
                 <Button type="submit" color="secondary" variant="contained">
-                  Login
+                  Signup
                 </Button>
               </Box>
             </form>
@@ -165,10 +272,29 @@ const phoneRegExp =
 
 const checkoutSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
+  firstName: yup.string().required("required"),
+  lastName: yup.string().required("required"),
+  country: yup.string().required("required"),
+  state: yup.string().required("required"),
+  city: yup.string().required("required"),
+  zip: yup.string().required("required"),
+  address: yup.string().required("required"),
+  contact_number: yup
+    .string()
+    .matches(phoneRegExp, "Phone number is not valid")
+    .required("required"),
   password: yup.string().required("required"),
 });
 const initialValues = {
   email: "",
+  firstName: "",
+  lastName: "",
+  country: "",
+  state: "",
+  city: "",
+  zip: "",
+  address: "",
+  contact_number: "",
   password: "",
 };
 
