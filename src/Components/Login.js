@@ -11,22 +11,63 @@ import * as yup from "yup";
 import React from "react";
 import Topbar from "./Topbar";
 import { tokens } from "../theme";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+
+const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
 const Login = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const handleFormSubmit = (values) => {
-    console.log(values);
+  const dispatch = useDispatch();
+  const [isActive, setIsActive] = useState(false);
+  const navigate = useNavigate();
+  const handleFormSubmit = async (values) => {
+    try {
+      const { data } = await API.post("/auth/login", values);
+      // console.log(data);
+      API.interceptors.request.use((req) => {
+        req.headers.authorization = `Bearer ${data.accessToken}`;
+        // console.log(req);
+        return req;
+      });
+      let profileData = await API.get("/profile/me", { headers: {} });
+      // console.log(profileData.data, data.accessToken);
+      let profile = profileData.data;
+      profile["accessToken"] = data.accessToken;
+      profile["refreshToken"] = data.refreshToken;
+      // let obj = { profile, accessToken, refreshToken };
+
+      localStorage.setItem("profile", JSON.stringify(profile));
+      setIsActive(true);
+      window.location.href = "/";
+      // let profiles = JSON.parse(localStorage.getItem("profiles"));
+      // if (profiles.email == values.email) {
+      //   profiles.accessToken = data.accessToken;
+      //   profiles.refreshToken = data.refreshToken;
+      //   // let profile = {...profiles, profiles.accessToken: data.accessToken, profiles.refreshToken: data.refreshToken};
+      //   localStorage.setItem("profile", JSON.stringify(profiles));
+      //   window.location.href = "/";
+      // }
+
+      console.log(profile);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <Box m="20px" sx={{ height: "100%" }}>
-      <Topbar login />
+      {isActive ? <Topbar /> : <Topbar login />}
+
       <Box m="20px" sx={{ height: "100%" }}>
         <Formik
           onSubmit={handleFormSubmit}
           initialValues={initialValues}
-          validationSchema={checkoutSchema}>
+          validationSchema={checkoutSchema}
+        >
           {({
             values,
             errors,
@@ -43,7 +84,8 @@ const Login = () => {
                 // display: "grid",
                 // placeItems: "center",
                 height: "100%",
-              }}>
+              }}
+            >
               <Typography variant="h3" color={colors.grey[100]} mb="2rem">
                 Login Form
               </Typography>

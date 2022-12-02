@@ -7,6 +7,7 @@ import { tokens } from "../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 // import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ChargingStationIcon from "@mui/icons-material/ChargingStation";
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
@@ -17,6 +18,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import axios from "axios";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -28,7 +30,8 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
         color: colors.grey[100],
       }}
       onClick={() => setSelected(title)}
-      icon={icon}>
+      icon={icon}
+    >
       <Typography>{title}</Typography>
       <Link to={to} />
     </MenuItem>
@@ -38,9 +41,27 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const Sidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const user = JSON.parse(localStorage.getItem("profile"));
 
+  const API = axios.create({ baseURL: process.env.REACT_APP_API });
+  // axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
+  API.interceptors.request.use((req) => {
+    if (localStorage.getItem("profile")) {
+      req.headers.authorization = `Bearer ${
+        JSON.parse(localStorage.getItem("profile")).accessToken
+      }`;
+    }
+
+    return req;
+  });
+  API.get("/auth/is-admin", {
+    headers: {},
+  })
+    .then(({ data }) => setIsAdmin(data.isAdmin))
+    .catch((err) => console.log(err));
   return (
     <Box
       sx={{
@@ -59,7 +80,8 @@ const Sidebar = () => {
         "& .pro-menu-item.active": {
           color: "#6870fa !important",
         },
-      }}>
+      }}
+    >
       <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
@@ -69,13 +91,15 @@ const Sidebar = () => {
             style={{
               margin: "10px 0 20px 0",
               color: colors.grey[100],
-            }}>
+            }}
+          >
             {!isCollapsed && (
               <Box
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                ml="15px">
+                ml="15px"
+              >
                 <Typography variant="h3" color={colors.grey[100]}>
                   EAPL
                 </Typography>
@@ -102,11 +126,12 @@ const Sidebar = () => {
                   variant="h2"
                   color={colors.grey[100]}
                   fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}>
-                  PUNEETH
+                  sx={{ m: "10px 0 0 0" }}
+                >
+                  {user.firstName.toUpperCase() || "Not Found"}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  CLIENT
+                  {isAdmin ? "ADMIN" : "CLIENT"}
                 </Typography>
               </Box>
             </Box>
@@ -124,7 +149,8 @@ const Sidebar = () => {
             <Typography
               variant="h6"
               color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}>
+              sx={{ m: "15px 0 5px 20px" }}
+            >
               Data
             </Typography>
             <Item
@@ -134,6 +160,16 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
+            {isAdmin && (
+              <Item
+                title="Add Customer"
+                to="add-customer"
+                icon={<PersonAddAltIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
             {/* <Item
               title="Contacts Information"
               to="/contacts"

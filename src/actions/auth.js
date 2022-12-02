@@ -1,5 +1,5 @@
 import * as api from "../api/index";
-import { AUTH, CREATE_PROFILE } from "./constants";
+import { AUTH, CREATE_PROFILE, EMAIL_CONFIRMATION } from "./constants";
 
 export const login = (formData) => async (dispatch) => {
   try {
@@ -21,7 +21,8 @@ export const login = (formData) => async (dispatch) => {
 export const adminregister = (formData) => async (dispatch) => {
   try {
     //Sign up the user
-    const { data } = await api.signUp(formData);
+    const { data } = await api.adminRegister(formData);
+    const { message } = await api.emailConfirmation(data.userId);
     dispatch({ type: AUTH, data });
     const { info } = await api.adminRegister({
       firstName: data?.result?.firstName,
@@ -34,6 +35,7 @@ export const adminregister = (formData) => async (dispatch) => {
       zip: data?.result?.zip,
       contact_number: data?.result?.contact_number,
     });
+    dispatch({ type: EMAIL_CONFIRMATION, message });
     dispatch({ type: CREATE_PROFILE, payload: info });
     window.location.href = "/";
     // history.push('/dashboard')
@@ -48,7 +50,7 @@ export const adminregister = (formData) => async (dispatch) => {
 export const customerregister = (formData) => async (dispatch) => {
   try {
     //Sign up the user
-    const { data } = await api.signUp(formData);
+    const { data } = await api.customerRegister(formData);
     dispatch({ type: AUTH, data });
     const { info } = await api.customerRegister({
       firstName: data?.result?.firstName,

@@ -173,8 +173,10 @@ const Graph = () => {
       get_x_axis(new Date().toISOString());
       // get_y1_axis(Math.floor(Math.random() * 101).toFixed(2));
       // get_y2_axis(Math.floor(Math.random() * 101).toFixed(2));
-      get_y1_axis(data.Temperature);
-      get_y2_axis(data.humidity);
+      // get_y1_axis(data.Temperature);
+      // get_y2_axis(data.humidity);
+      get_y1_axis(Math.random() * 40);
+      get_y2_axis(Math.floor(Math.random() * 70).toFixed(2));
       setVolt_R((x) => getData1());
     }, 1000);
     return () => clearInterval(interval);
@@ -198,18 +200,24 @@ const Graph = () => {
       </div>
       <br></br>
       <center>
+        //{" "}
         <table border="1">
+          //{" "}
           <tr>
-            <th>temperature</th>
-            <th>humidity</th>
+            // <th>temperature</th>
+            // <th>humidity</th>
+            //{" "}
           </tr>
+          //{" "}
           <tr>
-            {data && <td>{data.Temperature}</td>}
-            {data && <td>{data.humidity}</td>}
+            // {data && <td>{data.Temperature}</td>}
+            // {data && <td>{data.humidity}</td>}
+            //{" "}
           </tr>
+          //{" "}
         </table>
-        <br></br>
-        <h2>{count}</h2>
+        // <br></br>
+        // <h2>{count}</h2>
       </center>
     </div>
   );

@@ -3,3 +3,4 @@ export const ADD_CUSTOMER = "ADD_CUSTOMER";
 export const LOGOUT = "LOGOUT";
 export const AUTH = "AUTH";
 export const CREATE_PROFILE = "CREATE_PROFILE";
+export const EMAIL_CONFIRMATION = "EMAIL_CONFIRMATION";
