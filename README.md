@@ -45,24 +45,25 @@ After you have pushed the changes to the branch you have created wait for someti
 
 - [ ] Clean up the default setup from the project folder
 - [ ] Add Components Folder
-  - [ ] Home Page
+  - [x] Home Page
   - [ ] Sign Up Page
-    - [ ] Admin Sign up
-    - [ ] User Sign up
+    - [x] Admin Sign up
+    - [x] User Sign up
     - [ ] Tenant Sign up
   - [ ] Login Page
-    - [ ] Admin Login
+    - [x] Admin Login
     - [ ] Tenant Login
-    - [ ] User Login
+    - [x] User Login
   - [ ] Main Page
-    - [ ] Sidebar
-      - [ ] Home
+    - [x] Sidebar
+      - [x] Home
       - [ ] Rule Chain
-      - [ ] Customer
-      - [ ] Assets
+      - [x] Customer
+      - [x] Assets
+      - [x] Add Device
       - [x] Devices
         - [x] Device Table
           - [x] Device Each Sensor Graph
-      - [ ] Device Profiles
-      - [ ] Dashboard
+      - [x] Device Profiles
+      - [x] Dashboard
       - [ ] System Settings
