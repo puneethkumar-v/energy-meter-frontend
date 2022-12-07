@@ -18,6 +18,7 @@ import axios from "axios";
 import Header from "./Header.js";
 import { useState } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
@@ -27,6 +28,7 @@ const CustomerForm = () => {
 
 	const dispatch = useDispatch();
 	const [formData, setFormData] = useState(initialValues);
+	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 	// const user = JSON.parse(localStorage.getItem("profile"));
 	const colors = tokens(theme.palette.mode);
@@ -34,6 +36,7 @@ const CustomerForm = () => {
 		// console.log(values);
 		// dispatch(adminregister(values));
 		try {
+			setLoading(true);
 			const { data } = await API.post("auth/register-customer", values);
 			// console.log(adminRegister);
 			setFormData(data);
@@ -44,6 +47,7 @@ const CustomerForm = () => {
 					userId: data.userId,
 				}
 			);
+			setLoading(false);
 			if (emailConfirmation.status == 200) {
 				console.log("Done");
 			}
@@ -53,49 +57,71 @@ const CustomerForm = () => {
 	};
 
 	return (
-		<Box m="20px" sx={{ height: "90vh" }}>
+		<Box m="20px" sx={{ height: isNonMobile ? "90vh" : "100%" }}>
 			<Header
 				title="ADD CUSTOMER"
 				subtitle="Fill up the form with the Customer details"
 			/>
-			<Formik
-				onSubmit={handleFormSubmit}
-				initialValues={initialValues}
-				validationSchema={checkoutSchema}
+			<Box
+				m="20px"
+				sx={{
+					height: isNonMobile ? "80vh" : "100%",
+					// display: "flex",
+					// justifyContent: "center",
+					// alignItems: "center",
+				}}
 			>
-				{({
-					values,
-					errors,
-					touched,
-					handleBlur,
-					handleChange,
-					handleSubmit,
-				}) => (
-					<form
-						onSubmit={handleSubmit}
-						style={{
-							maxWidth: "30rem",
-							color: colors.grey[100],
-							margin: "0 auto",
-							padding: isNonMobile ? "2rem" : null,
-							borderRadius: "6px",
-							background: isNonMobile ? colors.primary[400] : null,
-							// display: "grid",
-							// placeItems: "center",
-							// height: "100%",
-						}}
-					>
-						<Box
-							display="grid"
-							// placeItems="center"
-							color={colors.grey[100]}
-							gap="30px"
-							gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-							sx={{
-								"& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+				<Formik
+					onSubmit={handleFormSubmit}
+					initialValues={initialValues}
+					validationSchema={checkoutSchema}
+				>
+					{({
+						values,
+						errors,
+						touched,
+						handleBlur,
+						handleChange,
+						handleSubmit,
+					}) => (
+						<form
+							onSubmit={handleSubmit}
+							style={{
+								width: "100%",
+								// boxShadow: "7px 7px 9px 0px rgba(0,0,0,0.47)",
+								boxShadow: isNonMobile
+									? "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)"
+									: null,
+								maxWidth: "40rem",
+								color: colors.grey[100],
+								margin: "0 auto",
+								padding: isNonMobile ? "2rem" : null,
+								borderRadius: "6px",
+								background: isNonMobile ? colors.primary[400] : null,
+								// display: "grid",
+								// placeItems: "center",
+								// height: "100%",
 							}}
 						>
-							{/* <TextField
+							<Typography
+								variant={isNonMobile ? "h3" : "h4"}
+								color={colors.grey[100]}
+								fontWeight="bold"
+								mb="2rem"
+							>
+								CUSTOMER DETAILS
+							</Typography>
+							<Box
+								display="grid"
+								// placeItems="center"
+								color={colors.grey[100]}
+								gap="30px"
+								gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+								sx={{
+									"& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+								}}
+							>
+								{/* <TextField
                 fullWidth
                 variant="filled"
                 type="text"
@@ -121,137 +147,137 @@ const CustomerForm = () => {
                 helperText={touched.lastName && errors.lastName}
                 sx={{ gridColumn: "span 2" }}
               /> */}
-							<TextField
-								fullWidth
-								variant="filled"
-								type="email"
-								label="Email"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.email}
-								name="email"
-								error={!!touched.email && !!errors.email}
-								helperText={touched.email && errors.email}
-								sx={{ gridColumn: "span 4" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="First Name"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.firstName}
-								name="firstName"
-								error={!!touched.firstName && !!errors.firstName}
-								helperText={touched.firstName && errors.firstName}
-								sx={{ gridColumn: "span 2" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="Last Name"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.lastName}
-								name="lastName"
-								error={!!touched.lastName && !!errors.lastName}
-								helperText={touched.lastName && errors.lastName}
-								sx={{ gridColumn: "span 2" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="Country"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.country}
-								name="country"
-								error={!!touched.country && !!errors.country}
-								helperText={touched.country && errors.country}
-								sx={{ gridColumn: "span 2" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="State"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.state}
-								name="state"
-								error={!!touched.state && !!errors.state}
-								helperText={touched.state && errors.state}
-								sx={{ gridColumn: "span 2" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="City"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.city}
-								name="city"
-								error={!!touched.city && !!errors.city}
-								helperText={touched.city && errors.city}
-								sx={{ gridColumn: "span 2" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="Zip"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.zip}
-								name="zip"
-								error={!!touched.zip && !!errors.zip}
-								helperText={touched.zip && errors.zip}
-								sx={{ gridColumn: "span 2" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="textarea"
-								label="Address"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.address}
-								name="address"
-								error={!!touched.address && !!errors.address}
-								helperText={touched.address && errors.address}
-								sx={{ gridColumn: "span 4" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="tel"
-								label="contact_number"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.contact_number}
-								name="contact_number"
-								error={!!touched.contact_number && !!errors.contact_number}
-								helperText={touched.contact_number && errors.contact_number}
-								sx={{ gridColumn: "span 4" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="password"
-								label="Password"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.password}
-								name="password"
-								error={!!touched.password && !!errors.password}
-								helperText={touched.password && errors.password}
-								sx={{ gridColumn: "span 4" }}
-							/>
-							{/* <TextField
+								<TextField
+									fullWidth
+									variant="filled"
+									type="email"
+									label="Email"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.email}
+									name="email"
+									error={!!touched.email && !!errors.email}
+									helperText={touched.email && errors.email}
+									sx={{ gridColumn: "span 4" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="First Name"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.firstName}
+									name="firstName"
+									error={!!touched.firstName && !!errors.firstName}
+									helperText={touched.firstName && errors.firstName}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="Last Name"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.lastName}
+									name="lastName"
+									error={!!touched.lastName && !!errors.lastName}
+									helperText={touched.lastName && errors.lastName}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="Country"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.country}
+									name="country"
+									error={!!touched.country && !!errors.country}
+									helperText={touched.country && errors.country}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="State"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.state}
+									name="state"
+									error={!!touched.state && !!errors.state}
+									helperText={touched.state && errors.state}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="City"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.city}
+									name="city"
+									error={!!touched.city && !!errors.city}
+									helperText={touched.city && errors.city}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="Zip"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.zip}
+									name="zip"
+									error={!!touched.zip && !!errors.zip}
+									helperText={touched.zip && errors.zip}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="textarea"
+									label="Address"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.address}
+									name="address"
+									error={!!touched.address && !!errors.address}
+									helperText={touched.address && errors.address}
+									sx={{ gridColumn: "span 4" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="tel"
+									label="contact_number"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.contact_number}
+									name="contact_number"
+									error={!!touched.contact_number && !!errors.contact_number}
+									helperText={touched.contact_number && errors.contact_number}
+									sx={{ gridColumn: "span 4" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="password"
+									label="Password"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.password}
+									name="password"
+									error={!!touched.password && !!errors.password}
+									helperText={touched.password && errors.password}
+									sx={{ gridColumn: "span 4" }}
+								/>
+								{/* <TextField
                 fullWidth
                 variant="filled"
                 type="text"
@@ -290,15 +316,36 @@ const CustomerForm = () => {
                 helperText={touched.address2 && errors.address2}
                 sx={{ gridColumn: "span 4" }}
               /> */}
-						</Box>
-						<Box display="flex" justifyContent="end" mt="20px">
-							<Button type="submit" color="secondary" variant="contained">
-								Create New User
-							</Button>
-						</Box>
-					</form>
-				)}
-			</Formik>
+							</Box>
+							<Box
+								display="flex"
+								justifyContent="center"
+								alignItems="center"
+								mt="20px"
+							>
+								{loading ? (
+									<CircularProgress />
+								) : (
+									<Button
+										type="submit"
+										color="secondary"
+										variant="contained"
+										sx={{
+											padding: isNonMobile ? "10px 20px" : null,
+											width: "100%",
+											fontSize: isNonMobile ? "16px" : null,
+											letterSpacing: "0.15rem",
+											fontWeight: "bold",
+										}}
+									>
+										ADD CUSTOMER
+									</Button>
+								)}
+							</Box>
+						</form>
+					)}
+				</Formik>
+			</Box>
 		</Box>
 	);
 };

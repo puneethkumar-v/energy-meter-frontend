@@ -1,4 +1,4 @@
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme, Button } from "@mui/material";
 import { useContext } from "react";
 import { ColorModeContext, tokens } from "../theme";
 import InputBase from "@mui/material/InputBase";
@@ -6,7 +6,7 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import LogoutIcon from "@mui/icons-material/Logout";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import axios from "axios";
@@ -46,9 +46,19 @@ const Topbar = ({ login }) => {
     <Box display="flex" justifyContent="space-between" p={2}>
       {/* SEARCH BAR */}
       {login ? (
-        <Typography variant="h3" color={colors.grey[100]}>
-          EAPL
-        </Typography>
+        // <Typography variant="h2" fontWeight="bold">
+        //   <Link
+        //     to="/"
+        //     style={{ textDecoration: "none", color: colors.grey[100] }}
+        //   >
+        //     EAPL
+        //   </Link>
+        // </Typography>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <Typography variant="h2" color={colors.grey[100]} fontWeight="bold">
+            EAPL
+          </Typography>
+        </Link>
       ) : (
         <Box
           display="flex"
@@ -63,7 +73,7 @@ const Topbar = ({ login }) => {
       )}
 
       {/* ICONS */}
-      <Box display="flex">
+      <Box display="flex" gap={login ? "10px" : "5px"}>
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (
             <DarkModeOutlinedIcon />
@@ -80,10 +90,25 @@ const Topbar = ({ login }) => {
               <SettingsOutlinedIcon />
             </IconButton>
             <IconButton onClick={handleLogout}>
-              <PersonOutlinedIcon />
+              <LogoutIcon />
             </IconButton>
           </>
-        ) : null}
+        ) : (
+          <Link
+            to="/login"
+            style={{
+              textDecoration: "none",
+            }}
+          >
+            <Button
+              color="secondary"
+              variant="contained"
+              sx={{ fontWeight: "500" }}
+            >
+              Get started
+            </Button>
+          </Link>
+        )}
       </Box>
     </Box>
   );

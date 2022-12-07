@@ -4,6 +4,7 @@ import Header from "./Header.js";
 import Topbar from "./Topbar.js";
 import { useState } from "react";
 import { ColorModeContext, useMode } from "../theme";
+import Value from "./Value";
 
 const Home = ({ header }) => {
   const [theme, colorMode] = useMode();
@@ -14,6 +15,7 @@ const Home = ({ header }) => {
       ) : (
         <Topbar login />
       )}
+      <Value />
     </Box>
   );
 };

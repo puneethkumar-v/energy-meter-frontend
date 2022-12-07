@@ -18,6 +18,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import QueuePlayNextIcon from "@mui/icons-material/QueuePlayNext";
 import axios from "axios";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -47,7 +48,6 @@ const Sidebar = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
 
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
-  // axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
   API.interceptors.request.use((req) => {
     if (localStorage.getItem("profile")) {
       req.headers.authorization = `Bearer ${
@@ -154,7 +154,7 @@ const Sidebar = () => {
               Data
             </Typography>
             <Item
-              title="Devices"
+              title={isAdmin ? "Devices" : "My Devices"}
               to="/devices"
               icon={<ChargingStationIcon />}
               selected={selected}
@@ -162,13 +162,15 @@ const Sidebar = () => {
             />
 
             {isAdmin && (
-              <Item
-                title="Add Customer"
-                to="add-customer"
-                icon={<PersonAddAltIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
+              <>
+                <Item
+                  title="Add Customer"
+                  to="add-customer"
+                  icon={<PersonAddAltIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </>
             )}
             {/* <Item
               title="Contacts Information"

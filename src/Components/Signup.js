@@ -9,6 +9,7 @@ import { Box } from "@mui/system";
 import { Formik } from "formik";
 import * as yup from "yup";
 import React from "react";
+import { useState } from "react";
 import Topbar from "./Topbar";
 import { tokens } from "../theme";
 import { useDispatch } from "react-redux";
@@ -16,6 +17,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { adminregister, customerregister } from "../actions/auth";
 import axios from "axios";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
@@ -24,12 +26,14 @@ const Signup = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   // const user = JSON.parse(localStorage.getItem("profile"));
   const colors = tokens(theme.palette.mode);
   const handleFormSubmit = async (values) => {
     // console.log(values);
     // dispatch(adminregister(values));
     try {
+      setLoading(true);
       const { data } = await API.post("/auth/register-admin", values);
       // console.log(adminRegister);
       // localStorage.setItem("profiles", JSON.stringify(data));
@@ -39,6 +43,7 @@ const Signup = () => {
           userId: data.userId,
         }
       );
+      setLoading(false);
       if (emailConfirmation.status == 200) {
         navigate("/login");
       }
@@ -48,9 +53,17 @@ const Signup = () => {
   };
 
   return (
-    <Box m="20px" sx={{ height: "100%" }}>
+    <Box m="20px" sx={{ height: isNonMobile ? "90vh" : "100%" }}>
       <Topbar login />
-      <Box m="20px" sx={{ height: "100%" }}>
+      <Box
+        m="20px"
+        sx={{
+          height: isNonMobile ? "85vh" : "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Formik
           onSubmit={handleFormSubmit}
           initialValues={initialValues}
@@ -67,15 +80,29 @@ const Signup = () => {
             <form
               onSubmit={handleSubmit}
               style={{
+                width: "100%",
                 maxWidth: "30rem",
+                boxShadow: isNonMobile
+                  ? "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)"
+                  : null,
+                color: colors.grey[100],
+                marginTop: "2rem",
                 margin: "0 auto",
+                padding: isNonMobile ? "2rem" : null,
+                borderRadius: "6px",
+                background: isNonMobile ? colors.primary[400] : null,
                 // display: "grid",
                 // placeItems: "center",
-                height: "100%",
+                // height: "100%",
               }}
             >
-              <Typography variant="h3" color={colors.grey[100]} mb="2rem">
-                Signup Form
+              <Typography
+                variant="h3"
+                color={colors.grey[100]}
+                fontWeight="bold"
+                mb="2rem"
+              >
+                SIGNUP
               </Typography>
               <Box
                 display="grid"
@@ -255,10 +282,30 @@ const Signup = () => {
                 sx={{ gridColumn: "span 4" }}
               /> */}
               </Box>
-              <Box display="flex" justifyContent="end" mt="20px">
-                <Button type="submit" color="secondary" variant="contained">
-                  Signup
-                </Button>
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                mt="20px"
+              >
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <Button
+                    type="submit"
+                    color="secondary"
+                    variant="contained"
+                    sx={{
+                      padding: isNonMobile ? "10px 20px" : null,
+                      width: "100%",
+                      fontSize: isNonMobile ? "16px" : null,
+                      letterSpacing: "0.15rem",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    SIGNUP
+                  </Button>
+                )}
               </Box>
             </form>
           )}

@@ -15,6 +15,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
@@ -22,10 +24,14 @@ const Login = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch();
+  const isNonMobile = useMediaQuery("(min-width:600px)");
+  const [loading, setLoading] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleFormSubmit = async (values) => {
     try {
+      setLoading(true);
       const { data } = await API.post("/auth/login", values);
       // console.log(data);
       API.interceptors.request.use((req) => {
@@ -41,8 +47,10 @@ const Login = () => {
       // let obj = { profile, accessToken, refreshToken };
 
       localStorage.setItem("profile", JSON.stringify(profile));
+
       setIsActive(true);
       window.location.href = "/";
+      setLoading(false);
       // let profiles = JSON.parse(localStorage.getItem("profiles"));
       // if (profiles.email == values.email) {
       //   profiles.accessToken = data.accessToken;
@@ -55,14 +63,24 @@ const Login = () => {
       console.log(profile);
     } catch (err) {
       console.log(err);
+      setError(err.message);
+      setLoading(false);
     }
   };
 
   return (
-    <Box m="20px" sx={{ height: "100%" }}>
+    <Box m="20px" sx={{ height: "85vh" }}>
       {isActive ? <Topbar /> : <Topbar login />}
 
-      <Box m="20px" sx={{ height: "100%" }}>
+      <Box
+        m="20px"
+        sx={{
+          height: "80vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Formik
           onSubmit={handleFormSubmit}
           initialValues={initialValues}
@@ -79,16 +97,28 @@ const Login = () => {
             <form
               onSubmit={handleSubmit}
               style={{
+                width: "100%",
                 maxWidth: "30rem",
+                boxShadow: isNonMobile
+                  ? "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)"
+                  : null,
+                color: colors.grey[100],
+                marginTop: "2rem",
                 margin: "0 auto",
-                // display: "grid",
-                // placeItems: "center",
-                height: "100%",
+                padding: isNonMobile ? "2rem" : null,
+                borderRadius: "6px",
+                background: isNonMobile ? colors.primary[400] : null,
               }}
             >
-              <Typography variant="h3" color={colors.grey[100]} mb="2rem">
-                Login Form
+              <Typography
+                variant="h3"
+                color={colors.grey[100]}
+                fontWeight="bold"
+                mb="2rem"
+              >
+                LOGIN
               </Typography>
+              {error && <Box>{error}</Box>}
               <Box
                 display="grid"
                 gap="30px"
@@ -189,10 +219,30 @@ const Login = () => {
                   sx={{ gridColumn: "span 4" }}
                 /> */}
               </Box>
-              <Box display="flex" justifyContent="end" mt="20px">
-                <Button type="submit" color="secondary" variant="contained">
-                  Login
-                </Button>
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                mt="20px"
+              >
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <Button
+                    type="submit"
+                    color="secondary"
+                    variant="contained"
+                    sx={{
+                      padding: "10px 20px",
+                      width: "100%",
+                      fontSize: "16px",
+                      letterSpacing: "0.15rem",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Login
+                  </Button>
+                )}
               </Box>
             </form>
           )}
