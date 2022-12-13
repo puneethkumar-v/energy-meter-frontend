@@ -149,7 +149,12 @@ const DeviceForm = () => {
 									}
 									sx={{ gridColumn: "span 4" }}
 								/>
-								<div style={{ gridColumn: "span 4" }}>
+								<div
+									style={{
+										gridColumn: "span 4",
+										width: "100%",
+									}}
+								>
 									<InputLabel id="user">User</InputLabel>
 									<Select
 										labelId="User"
@@ -159,7 +164,7 @@ const DeviceForm = () => {
 									>
 										{customers.map((customer) => (
 											<MenuItem value={customer.userId}>
-												{customer.firstName}
+												{customer.lastName}
 											</MenuItem>
 										))}
 									</Select>

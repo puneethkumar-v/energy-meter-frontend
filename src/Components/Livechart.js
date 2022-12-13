@@ -49,7 +49,6 @@ function Livechart({ deviceid }) {
       // parameter: "Frequency",
     });
     setReadingTime(data.reading_time);
-    console.log(data.value);
     return data.value;
   }
 
@@ -217,8 +216,7 @@ function Livechart({ deviceid }) {
           labelId="Sensor Type"
           id="sensor-type"
           value={sensorType}
-          onChange={handleChange}
-        >
+          onChange={handleChange}>
           {sensorNames.map((sensor) => (
             <MenuItem key={sensor} value={sensor}>
               {sensor}
@@ -232,8 +230,7 @@ function Livechart({ deviceid }) {
           labelId="Graph Type"
           id="graph-type"
           value={graphType}
-          onChange={handleGraphType}
-        >
+          onChange={handleGraphType}>
           <MenuItem value="area">Area</MenuItem>
           <MenuItem value="line">Line</MenuItem>
           <MenuItem value="bar">Bar</MenuItem>
@@ -245,8 +242,7 @@ function Livechart({ deviceid }) {
         style={{ textAlign: "left" }}
         mt="2rem"
         ml="2rem"
-        mb="-1.5rem"
-      >
+        mb="-1.5rem">
         {sensorType}
       </Typography>
       <br />
