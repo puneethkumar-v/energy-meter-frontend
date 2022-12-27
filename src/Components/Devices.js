@@ -14,8 +14,9 @@ const Devices = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [arr, setArr] = useState([]);
-  // arr.push({ a: "a" });
-  // console.log(arr);
+  const [customerTable, setCustomerTable] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
   const [count, setCount] = useState(0);
   API.interceptors.request.use((req) => {
@@ -27,26 +28,28 @@ const Devices = () => {
 
     return req;
   });
+  API.get("/auth/is-admin", {
+    headers: {},
+  })
+    .then(({ data }) => setIsAdmin(data.isAdmin))
+    .catch((err) => console.log(err));
+  
+  API.get("/device/get-my-devices", {
+    header: {},
+  })
+    .then(({data}) => {
+      setCustomerTable(data);
+    })
+      .catch((err) => console.log(err));
+      
   API.get("/device/get-all-devices", {
     headers: {},
   })
     .then(({ data }) => {
-      // data.forEach((device) =>
-      //   arr.push({
-      //     // setCount((count) => count + 1),
-      //     // device.device_id,
-      //     // device.client_topic,
-      //     // device.user.firstName,
-      //     a: "a",
-      //     b: "b",
-      //     c: "c",
-      //   })
-      // );
-      // let user = data[0].user.lastName;
       setArr(data);
     })
     .catch((err) => console.log(err));
-  // console.log(arr);
+
 
   const columns = [
     // { field: "sl_no", headerName: "SL. NO" },
@@ -105,12 +108,10 @@ const Devices = () => {
           //   </Typography> */}
           //   <Button variant="contained">Open</Button>
           // </Box>
-          <Link to="/values" style={{ textDecoration: "none" }}>
+          <Link to={`device/${arr.device_id}`} style={{ textDecoration: "none" }}>
             <Button
               color="secondary"
               variant="contained"
-              // width="40%"
-              // color={colors.greenAccent[600]}
             >
               Monitor Sensors
             </Button>
@@ -150,13 +151,24 @@ const Devices = () => {
             color: `${colors.greenAccent[200]} !important`,
           },
         }}
-      >
-        <DataGrid
+      >{
+        isAdmin ? (
+          <DataGrid
           checkboxSelection
           rows={arr}
           columns={columns}
           getRowId={(row) => row.device_id}
         />
+        ) : (
+          <DataGrid
+          checkboxSelection
+          rows={customerTable}
+          columns={columns}
+          getRowId={(row) => row.device_id}
+        />
+        )
+      }
+        
       </Box>
     </Box>
   );

@@ -60,7 +60,7 @@ const Login = () => {
       //   window.location.href = "/";
       // }
 
-      console.log(profile);
+      // console.log(profile);
     } catch (err) {
       console.log(err);
       setError(err.message);

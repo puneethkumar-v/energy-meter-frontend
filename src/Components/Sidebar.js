@@ -43,6 +43,7 @@ const Sidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [role, setRole] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const user = JSON.parse(localStorage.getItem("profile"));
@@ -57,6 +58,12 @@ const Sidebar = () => {
 
     return req;
   });
+
+  API.get("auth/my-role", {
+    headers: {}
+  })
+  .then(({data}) => setRole(data.role))
+  .catch((err) => console.log(err));
   API.get("/auth/is-admin", {
     headers: {},
   })
@@ -127,7 +134,7 @@ const Sidebar = () => {
                   {user.firstName.toUpperCase() || "Not Found"}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  {isAdmin ? "ADMIN" : "CLIENT"}
+                  {role}
                 </Typography>
               </Box>
             </Box>
@@ -156,24 +163,44 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-            {isAdmin && (
+            {role === "ADMIN" && (
               <>
+              <Item
+                title="Add Customer"
+                to="add-customer"
+                icon={<PersonAddAltIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Add Devices"
+                to="add-device"
+                icon={<AddToQueueIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </>
+            )}
+            {
+              role === "CUSTOMER" && (
+                <>
                 <Item
-                  title="Add Customer"
-                  to="add-customer"
+                  title="Add Tenant"
+                  to="add-tenant"
                   icon={<PersonAddAltIcon />}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Add Devices"
-                  to="add-device"
+                  title="Assign Devices"
+                  to="assign-device"
                   icon={<AddToQueueIcon />}
                   selected={selected}
                   setSelected={setSelected}
                 />
               </>
-            )}
+              )
+            }
             {/* <Item
               title="Contacts Information"
               to="/contacts"

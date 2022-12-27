@@ -18,6 +18,7 @@ const DeviceForm = () => {
 	const [customers, setCustomers] = useState([]);
 	const theme = useTheme();
 	const colors = tokens(theme.palette.mode);
+	const [error, setError] = useState("");
 	const isNonMobile = useMediaQuery("(min-width:650px)");
 	const [loading, setLoading] = useState(false);
 	const API = axios.create({ baseURL: process.env.REACT_APP_API });
@@ -55,8 +56,19 @@ const DeviceForm = () => {
 			setTopics(data);
 		})
 		.catch((err) => console.log(err));
-	const handleFormSubmit = (values) => {
-		console.log(values);
+	const handleFormSubmit = async (values) => {
+		try {
+			setLoading(true);
+			const { data } = await API.post("/device/add", values);
+			// console.log(adminRegister);
+			// localStorage.setItem("profiles", JSON.stringify(data));
+			console.log(data);
+			setLoading(false);
+		  } catch (err) {
+			console.log(err);
+			setError(err.message);
+			setLoading(false);
+		  }
 	};
 
 	return (
@@ -65,7 +77,7 @@ const DeviceForm = () => {
 				title="ADD DEVICE"
 				subtitle="Add a new Device for the Customer"
 			/>
-			// {topics.map((topic) => topic.topic)}
+			{/* // {topics.map((topic) => topic.topic)} */}
 			<Box
 				m="20px"
 				sx={{
@@ -117,6 +129,7 @@ const DeviceForm = () => {
 							>
 								DEVICE DETAILS
 							</Typography>
+							{error && <Box>{error}</Box>}
 							<Box
 								display="grid"
 								// placeItems="center"
@@ -155,16 +168,30 @@ const DeviceForm = () => {
 										width: "100%",
 									}}
 								>
-									<InputLabel id="user">User</InputLabel>
+									<InputLabel id="user_id">User</InputLabel>
 									<Select
+										fullWidth
+										variant="filled"
+										// type="text"
+										label="User ID"
+										onBlur={handleBlur}
+										onChange={handleChange}
+										value={values.user_id}
+										name="user_id"
 										labelId="User"
-										id="user"
-										// value={graphType}
-										onChange={(e) => e.target.value}
+										id="user_id"
+										error={
+											!!touched.user_id &&
+											!!errors.user_id
+										}
+										helperText={
+											touched.user_id && errors.user_id
+										}
+										sx={{ gridColumn: "span 4" }}
 									>
-										{customers.map((customer) => (
-											<MenuItem value={customer.userId}>
-												{customer.lastName}
+										{customers.map((customer, id) => (
+											<MenuItem value={customer.userId} key={id}>
+												{customer.firstName}
 											</MenuItem>
 										))}
 									</Select>
@@ -173,146 +200,238 @@ const DeviceForm = () => {
 									fullWidth
 									variant="filled"
 									type="text"
-									label="First Name"
+									label="Clinet Topic"
 									onBlur={handleBlur}
 									onChange={handleChange}
-									value={values.firstName}
-									name="firstName"
+									value={values.client_topic}
+									name="client_topic"
 									error={
-										!!touched.firstName &&
-										!!errors.firstName
+										!!touched.client_topic &&
+										!!errors.client_topic
 									}
 									helperText={
-										touched.firstName && errors.firstName
-									}
-									sx={{ gridColumn: "span 2" }}
-								/>
-								<TextField
-									fullWidth
-									variant="filled"
-									type="text"
-									label="Last Name"
-									onBlur={handleBlur}
-									onChange={handleChange}
-									value={values.lastName}
-									name="lastName"
-									error={
-										!!touched.lastName && !!errors.lastName
-									}
-									helperText={
-										touched.lastName && errors.lastName
-									}
-									sx={{ gridColumn: "span 2" }}
-								/>
-								<TextField
-									fullWidth
-									variant="filled"
-									type="text"
-									label="Country"
-									onBlur={handleBlur}
-									onChange={handleChange}
-									value={values.country}
-									name="country"
-									error={
-										!!touched.country && !!errors.country
-									}
-									helperText={
-										touched.country && errors.country
-									}
-									sx={{ gridColumn: "span 2" }}
-								/>
-								<TextField
-									fullWidth
-									variant="filled"
-									type="text"
-									label="State"
-									onBlur={handleBlur}
-									onChange={handleChange}
-									value={values.state}
-									name="state"
-									error={!!touched.state && !!errors.state}
-									helperText={touched.state && errors.state}
-									sx={{ gridColumn: "span 2" }}
-								/>
-								<TextField
-									fullWidth
-									variant="filled"
-									type="text"
-									label="City"
-									onBlur={handleBlur}
-									onChange={handleChange}
-									value={values.city}
-									name="city"
-									error={!!touched.city && !!errors.city}
-									helperText={touched.city && errors.city}
-									sx={{ gridColumn: "span 2" }}
-								/>
-								<TextField
-									fullWidth
-									variant="filled"
-									type="text"
-									label="Zip"
-									onBlur={handleBlur}
-									onChange={handleChange}
-									value={values.zip}
-									name="zip"
-									error={!!touched.zip && !!errors.zip}
-									helperText={touched.zip && errors.zip}
-									sx={{ gridColumn: "span 2" }}
-								/>
-								<TextField
-									fullWidth
-									variant="filled"
-									type="textarea"
-									label="Address"
-									onBlur={handleBlur}
-									onChange={handleChange}
-									value={values.address}
-									name="address"
-									error={
-										!!touched.address && !!errors.address
-									}
-									helperText={
-										touched.address && errors.address
+										touched.client_topic && errors.client_topic
 									}
 									sx={{ gridColumn: "span 4" }}
 								/>
+								{/* <div
+									style={{
+										gridColumn: "span 4",
+										width: "100%",
+									}}
+								>
+									<InputLabel id="client_topic">Client Topic</InputLabel>
+									<Select
+										fullWidth
+										variant="filled"
+										// type="text"
+										label="Client Topic"
+										onBlur={handleBlur}
+										onChange={handleChange}
+										value={values.client_topic}
+										name="client_topic"
+										labelId="Client Topic"
+										id="client_topic"
+										error={
+											!!touched.client_topic &&
+											!!errors.client_topic
+										}
+										helperText={
+											touched.client_topic && errors.client_topic
+										}
+										sx={{ gridColumn: "span 4" }}
+									>
+										{topics.map((topic, id) => (
+											<MenuItem value={topic.topic} key={id}>
+												{topic.topic}
+											</MenuItem>
+										))}
+									</Select>
+								</div> */}
+								{/* <TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="Client Topic"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.client_topic}
+									name="client_topic"
+									error={
+										!!touched.client_topic &&
+										!!errors.client_topic
+									}
+									helperText={
+										touched.client_topic && errors.client_topic
+									}
+									sx={{ gridColumn: "span 4" }}
+								/> */}
 								<TextField
 									fullWidth
 									variant="filled"
-									type="tel"
-									label="contact_number"
+									type="text"
+									label="Variant"
 									onBlur={handleBlur}
 									onChange={handleChange}
-									value={values.contact_number}
-									name="contact_number"
+									value={values.variant}
+									name="variant"
 									error={
-										!!touched.contact_number &&
-										!!errors.contact_number
+										!!touched.variant && !!errors.variant
 									}
 									helperText={
-										touched.contact_number &&
-										errors.contact_number
+										touched.variant && errors.variant
 									}
-									sx={{ gridColumn: "span 4" }}
+									sx={{ gridColumn: "span 2" }}
 								/>
 								<TextField
 									fullWidth
 									variant="filled"
-									type="password"
-									label="Password"
+									type="text"
+									label="hw_ver"
 									onBlur={handleBlur}
 									onChange={handleChange}
-									value={values.password}
-									name="password"
+									value={values.hw_ver}
+									name="hw_ver"
 									error={
-										!!touched.password && !!errors.password
+										!!touched.hw_ver && !!errors.hw_ver
 									}
 									helperText={
-										touched.password && errors.password
+										touched.hw_ver && errors.hw_ver
 									}
-									sx={{ gridColumn: "span 4" }}
+									sx={{ gridColumn: "span 2" }}
 								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="fw_ver"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.fw_ver}
+									name="fw_ver"
+									error={!!touched.fw_ver && !!errors.fw_ver}
+									helperText={touched.fw_ver && errors.fw_ver}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="o_logo"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.o_logo}
+									name="o_logo"
+									error={!!touched.o_logo && !!errors.o_logo}
+									helperText={touched.o_logo && errors.o_logo}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="o_prod_name"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.o_prod_name}
+									name="o_prod_name"
+									error={!!touched.o_prod_name && !!errors.o_prod_name}
+									helperText={touched.o_prod_name && errors.o_prod_name}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="o_prod_ver"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.o_prod_ver}
+									name="o_prod_ver"
+									error={!!touched.o_prod_ver && !!errors.o_prod_ver}
+									helperText={touched.o_prod_ver && errors.o_prod_ver}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="u_dev_name"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.u_dev_name}
+									name="u_dev_name"
+									error={!!touched.u_dev_name && !!errors.u_dev_name}
+									helperText={touched.u_dev_name && errors.u_dev_name}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="u_comp_name"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.u_comp_name}
+									name="u_comp_name"
+									error={!!touched.u_comp_name && !!errors.u_comp_name}
+									helperText={touched.u_comp_name && errors.u_comp_name}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="u_tz_diff"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.u_tz_diff}
+									name="u_tz_diff"
+									error={!!touched.u_tz_diff && !!errors.u_tz_diff}
+									helperText={touched.u_tz_diff && errors.u_tz_diff}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="u_lat"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.u_lat}
+									name="u_lat"
+									error={!!touched.u_lat && !!errors.u_lat}
+									helperText={touched.u_lat && errors.u_lat}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="u_long"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.u_long}
+									name="u_long"
+									error={!!touched.u_long && !!errors.u_long}
+									helperText={touched.u_long && errors.u_long}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								<TextField
+									fullWidth
+									variant="filled"
+									type="text"
+									label="u_conn_ssid"
+									onBlur={handleBlur}
+									onChange={handleChange}
+									value={values.u_conn_ssid}
+									name="u_conn_ssid"
+									error={!!touched.u_conn_ssid && !!errors.u_conn_ssid}
+									helperText={touched.u_conn_ssid && errors.u_conn_ssid}
+									sx={{ gridColumn: "span 2" }}
+								/>
+								
+								
 							</Box>
 							<Box
 								display="flex"
@@ -339,7 +458,7 @@ const DeviceForm = () => {
 											fontWeight: "bold",
 										}}
 									>
-										ADD CUSTOMER
+										ADD DEVICE
 									</Button>
 								)}
 							</Box>
@@ -373,17 +492,17 @@ const initialValues = {
 	device_id: "",
 	user_id: "",
 	client_topic: "",
-	variant: "",
-	hw_ver: "",
-	fw_ver: "",
-	o_logo: "",
-	o_prod_name: "",
-	o_prod_ver: "",
-	u_dev_name: "",
-	u_comp_name: "",
-	u_tz_diff: "",
-	u_lat: "",
-	u_long: "",
+	variant: "1",
+	hw_ver: "1",
+	fw_ver: "1",
+	o_logo: "1",
+	o_prod_name: "1",
+	o_prod_ver: "1",
+	u_dev_name: "1",
+	u_comp_name: "1",
+	u_tz_diff: "1",
+	u_lat: "1",
+	u_long: "1",
 	u_conn_ssid: "",
 };
 

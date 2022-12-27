@@ -34,7 +34,7 @@ function Livechart({ deviceid }) {
   // }
 
   API.post("/sensorValue/get-unique-sensor-names", {
-    deviceId: "MQI1-90-38-0C-57-58-BC",
+    deviceId: "MQI1-90-38-0C-57-57-F4",
   })
     .then(({ data }) => {
       setSensorNames(data);
@@ -44,7 +44,7 @@ function Livechart({ deviceid }) {
 
   async function fetch_freq() {
     const { data } = await API.post("/sensorValue/get-data", {
-      deviceId: "MQI1-90-38-0C-57-58-BC",
+      deviceId: "MQI1-90-38-0C-57-57-F4",
       parameter: sensorType || "Frequency",
       // parameter: "Frequency",
     });

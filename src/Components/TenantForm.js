@@ -22,7 +22,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
-const CustomerForm = () => {
+const TenantForm = () => {
 	const theme = useTheme();
 	const isNonMobile = useMediaQuery("(min-width:650px)");
 
@@ -37,7 +37,7 @@ const CustomerForm = () => {
 		// dispatch(adminregister(values));
 		try {
 			setLoading(true);
-			const { data } = await API.post("auth/register-customer", values);
+			const { data } = await API.post("auth/register-tenant", values);
 			// console.log(adminRegister);
 			setFormData(data);
 			// localStorage.setItem("profiles", JSON.stringify(formData));
@@ -48,7 +48,7 @@ const CustomerForm = () => {
 				}
 			);
 			setLoading(false);
-			if (emailConfirmation.status == 200) {
+			if (emailConfirmation.status === 200) {
 				console.log("Done");
 			}
 		} catch (err) {
@@ -59,8 +59,8 @@ const CustomerForm = () => {
 	return (
 		<Box m="20px" sx={{ height: isNonMobile ? "90vh" : "100%" }}>
 			<Header
-				title="ADD CUSTOMER"
-				subtitle="Fill up the form with the Customer details"
+				title="ADD TENANT"
+				subtitle="Fill up the form with the Tenant details"
 			/>
 			<Box
 				m="20px"
@@ -109,7 +109,7 @@ const CustomerForm = () => {
 								fontWeight="bold"
 								mb="2rem"
 							>
-								CUSTOMER DETAILS
+								TENANT DETAILS
 							</Typography>
 							<Box
 								display="grid"
@@ -338,7 +338,7 @@ const CustomerForm = () => {
 											fontWeight: "bold",
 										}}
 									>
-										ADD CUSTOMER
+										ADD TENANT
 									</Button>
 								)}
 							</Box>
@@ -353,32 +353,32 @@ const CustomerForm = () => {
 const phoneRegExp =
 	/^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
-	const checkoutSchema = yup.object().shape({
-		email: yup.string().email("invalid email").required("required"),
-		firstName: yup.string().required("required"),
-		lastName: yup.string().required("required"),
-		country: yup.string().required("required"),
-		state: yup.string().required("required"),
-		city: yup.string().required("required"),
-		zip: yup.string().required("required"),
-		address: yup.string().required("required"),
-		contact_number: yup
-			.string()
-			.matches(phoneRegExp, "Phone number is not valid")
-			.required("required"),
-		password: yup.string().required("required"),
-	});
-	const initialValues = {
-		email: "",
-		firstName: "",
-		lastName: "",
-		country: "",
-		state: "",
-		city: "",
-		zip: "",
-		address: "",
-		contact_number: "",
-		password: "",
-	};
+const checkoutSchema = yup.object().shape({
+	email: yup.string().email("invalid email").required("required"),
+	firstName: yup.string().required("required"),
+	lastName: yup.string().required("required"),
+	country: yup.string().required("required"),
+	state: yup.string().required("required"),
+	city: yup.string().required("required"),
+	zip: yup.string().required("required"),
+	address: yup.string().required("required"),
+	contact_number: yup
+		.string()
+		.matches(phoneRegExp, "Phone number is not valid")
+		.required("required"),
+	password: yup.string().required("required"),
+});
+const initialValues = {
+	email: "",
+	firstName: "",
+	lastName: "",
+	country: "",
+	state: "",
+	city: "",
+	zip: "",
+	address: "",
+	contact_number: "",
+	password: "",
+};
 
-export default CustomerForm;
+export default TenantForm;

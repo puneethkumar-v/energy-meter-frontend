@@ -12,6 +12,8 @@ import Livechart from "./Components/Livechart";
 import Sidebar from "./Components/Sidebar";
 import Login from "./Components/Login";
 import CustomerForm from "./Components/CustomerForm";
+import TenantForm from "./Components/TenantForm";
+import AssignDeviceForm from "./Components/AssignDeviceForm";
 // import Devices from "./Components/Devices";
 // import Graph from "./Components/Graph";
 
@@ -43,9 +45,11 @@ function App() {
 
               <Route path="/devices" element={<Devices />} />
               <Route path="/add-customer" element={<CustomerForm />} />
-              <Route path="/values" element={<Livechart />} />
+              <Route path="/device/:id" element={<Livechart />} />
               <Route path="/login" element={<Login />} />
+              <Route path="add-tenant" element={<TenantForm />} />
               <Route path="/add-device" element={<DeviceForm />} />
+              <Route path="/assign-device" element={<AssignDeviceForm />} />
               {/* <Route path="/home" element={<Home />} /> */}
             </Routes>
           </main>
