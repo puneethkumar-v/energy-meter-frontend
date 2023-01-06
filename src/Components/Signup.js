@@ -18,6 +18,7 @@ import { adminregister, customerregister } from "../actions/auth";
 import axios from "axios";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
@@ -26,6 +27,7 @@ const Signup = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   // const user = JSON.parse(localStorage.getItem("profile"));
   const colors = tokens(theme.palette.mode);
@@ -49,6 +51,7 @@ const Signup = () => {
       }
     } catch (err) {
       console.log(err);
+      setError(err.message);
     }
   };
 
@@ -104,6 +107,23 @@ const Signup = () => {
               >
                 SIGNUP
               </Typography>
+              {error && (
+                <Box
+                  mb="1rem"
+                  sx={{
+                    color: "#e87c03",
+                    display: "flex",
+                    // justifyContent: "center",
+                    gap: "0.5rem",
+                    alignItems: "center",
+                    borderRadius: "5px",
+                  }}
+                  p=".5rem"
+                >
+                  <ErrorIcon />
+                  {error}
+                </Box>
+              )}
               <Box
                 display="grid"
                 gap="30px"

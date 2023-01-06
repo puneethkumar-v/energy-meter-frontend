@@ -1,7 +1,7 @@
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../theme";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { mockDataTeam } from "../data/mockData";
 import Header from "./Header";
 import { Link } from "react-router-dom";
@@ -15,6 +15,8 @@ const Devices = () => {
   const colors = tokens(theme.palette.mode);
   const [arr, setArr] = useState([]);
   const [customerTable, setCustomerTable] = useState([]);
+  const [assignedDevices, setAssignedDevices] = useState([]);
+  const [role, setRole] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
 
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
@@ -33,23 +35,53 @@ const Devices = () => {
   })
     .then(({ data }) => setIsAdmin(data.isAdmin))
     .catch((err) => console.log(err));
-  
-  API.get("/device/get-my-devices", {
-    header: {},
-  })
-    .then(({data}) => {
-      setCustomerTable(data);
-    })
-      .catch((err) => console.log(err));
-      
-  API.get("/device/get-all-devices", {
-    headers: {},
-  })
-    .then(({ data }) => {
-      setArr(data);
-    })
-    .catch((err) => console.log(err));
 
+  const getRole = async () => {
+    const { data } = await API.get("/auth/my-role");
+    setRole(data.role);
+  };
+
+  const getMyDevices = async () => {
+    try {
+      const { data } = await API.get("/device/get-my-devices");
+      setCustomerTable(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getAssignedDevices = async () => {
+    try {
+      const { data } = await API.get("/tenant/get-assigned-devices");
+      setAssignedDevices(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getAllDevices = async () => {
+    try {
+      const { data } = await API.get("/device/get-all-devices");
+      console.log(data);
+      console.log("hii");
+      setArr(data);
+      console.log(arr);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getRole();
+  }, []);
+
+  useEffect(() => {
+    // isAdmin ? getAllDevices() : getMyDevices();
+
+    if (role === "TENANT") getAssignedDevices();
+    if (role === "ADMIN") getAllDevices();
+    if (role === "CUSTOMER") getMyDevices();
+  }, [role]);
 
   const columns = [
     // { field: "sl_no", headerName: "SL. NO" },
@@ -82,7 +114,36 @@ const Devices = () => {
       field: "accessLevel",
       headerName: "Details",
       flex: 1,
-      renderCell: ({ row: { access } }) => {
+      renderCell: ({ row: { access }, id }) => {
+        // renderCell: (index) => {
+        // const currentIndex = api.getRowIndex(id);
+        const deviceId = id;
+        let currentDevice = {};
+
+        if (role === "ADMIN") {
+          currentDevice = arr.filter(
+            (device) => device.device_id === deviceId
+          )[0];
+        }
+
+        if (role === "CUSTOMER") {
+          currentDevice = customerTable.filter(
+            (device) => device.device_id === deviceId
+          )[0];
+        }
+        if (role === "TENANT") {
+          currentDevice = assignedDevices.filter(
+            (device) => device.device_id === deviceId
+          )[0];
+        }
+
+        console.log(currentDevice);
+        // console.log({ currentDevice });
+        // const currentIndex = index.api.getRowIndex(index.row.id);
+
+        // console.log(currentIndex + 1);
+        // return <h1>hi</h1>;
+
         return (
           // <Box
           //   width="40%"
@@ -108,18 +169,21 @@ const Devices = () => {
           //   </Typography> */}
           //   <Button variant="contained">Open</Button>
           // </Box>
-          <Link to={`device/${arr.device_id}`} style={{ textDecoration: "none" }}>
-            <Button
-              color="secondary"
-              variant="contained"
+          <>
+            <Link
+              to={currentDevice.device_id}
+              style={{ textDecoration: "none" }}
             >
-              Monitor Sensors
-            </Button>
-          </Link>
+              <Button color="secondary" variant="contained">
+                Monitor Sensors
+              </Button>
+            </Link>
+          </>
         );
       },
     },
   ];
+
   return (
     <Box m="20px">
       <Header title="DEVICES" subtitle="Here is your device list" />
@@ -151,24 +215,31 @@ const Devices = () => {
             color: `${colors.greenAccent[200]} !important`,
           },
         }}
-      >{
-        isAdmin ? (
+      >
+        {role === "ADMIN" && (
           <DataGrid
-          checkboxSelection
-          rows={arr}
-          columns={columns}
-          getRowId={(row) => row.device_id}
-        />
-        ) : (
+            checkboxSelection
+            rows={arr}
+            columns={columns}
+            getRowId={(row) => row.device_id}
+          />
+        )}
+        {role === "CUSTOMER" && (
           <DataGrid
-          checkboxSelection
-          rows={customerTable}
-          columns={columns}
-          getRowId={(row) => row.device_id}
-        />
-        )
-      }
-        
+            checkboxSelection
+            rows={customerTable}
+            columns={columns}
+            getRowId={(row) => row.device_id}
+          />
+        )}
+        {role === "TENANT" && (
+          <DataGrid
+            checkboxSelection
+            rows={assignedDevices}
+            columns={columns}
+            getRowId={(row) => row.device_id}
+          />
+        )}
       </Box>
     </Box>
   );

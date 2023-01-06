@@ -2,10 +2,14 @@ import React from "react";
 import {
   Button,
   FormControl,
+  InputLabel,
+  Select,
   TextField,
   Typography,
   useTheme,
+  MenuItem,
 } from "@mui/material";
+import ErrorIcon from "@mui/icons-material/Error";
 import { Box } from "@mui/system";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -16,25 +20,26 @@ import { useNavigate, Link } from "react-router-dom";
 import { adminregister, customerregister } from "../actions/auth";
 import axios from "axios";
 import Header from "./Header.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 const AssignDeviceForm = () => {
-  const [tenants, setTenants] = useState([]);
+  // const [devices, setDevices] = useState([]);
   const [devices, setDevices] = useState([]);
 
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(min-width:650px)");
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(initialValues);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [customerId, setCustomerId] = useState(
-    JSON.parse(localStorage.getItem("profile")).userId
-  );
+  // const [customerId, setCustomerId] = useState();
+  // console.log(customerId);
   // const user = JSON.parse(localStorage.getItem("profile"));
+  const [tenants, setTenants] = useState([]);
   const colors = tokens(theme.palette.mode);
   // console.log(customerId);
 
@@ -49,35 +54,44 @@ const AssignDeviceForm = () => {
     return req;
   });
 
-  API.post("/tenant/get", customerId)
-    .then(({ data }) => {
-      console.log(data);
-    })
-    .catch((err) => console.log(err));
+  const getTenants = async () => {
+    const result = await API.get("/profile/me");
+    const { data } = await API.post("/tenant/get", {
+      customerId: result.data.userId,
+    });
+    setTenants(data);
+  };
 
-  const handleFormSubmit = async (values) => {
-    // console.log(values);
-    // dispatch(adminregister(values));
-    // try {
-    // 	setLoading(true);
-    // 	const { data } = await API.post("auth/register-customer", values);
-    // 	// console.log(adminRegister);
-    // 	setFormData(data);
-    // 	// localStorage.setItem("profiles", JSON.stringify(formData));
-    // 	const emailConfirmation = await API.post(
-    // 		"/auth/send-confirmation-email",
-    // 		{
-    // 			userId: data.userId,
-    // 		}
-    // 	);
-    // 	setLoading(false);
-    // 	if (emailConfirmation.status == 200) {
-    // 		console.log("Done");
-    // 	}
-    // } catch (err) {
-    // 	console.log(err);
-    console.log(values);
-    // }
+  const assignDeviceToTenant = async (values) => {
+    const { data } = await API.post("/customer/deviceTenants/add", {
+      deviceId: values.device_id,
+      tenantId: values.tenant_id,
+    });
+    return data;
+  };
+
+  const getMyDevices = async () => {
+    const { data } = await API.get("/device/get-my-devices");
+    // devices = await data;
+    setDevices(data);
+    // console.log(data);
+  };
+  useEffect(() => {
+    getTenants();
+  }, []);
+  useEffect(() => {
+    getMyDevices();
+  }, []);
+
+  const handleFormSubmit = async (values, { resetForm }) => {
+    try {
+      const data = await assignDeviceToTenant(values);
+      resetForm({ values: initialValues });
+    } catch (err) {
+      console.log(err);
+      setError(err.message);
+      resetForm({ values: initialValues });
+    }
   };
 
   return (
@@ -135,6 +149,23 @@ const AssignDeviceForm = () => {
               >
                 ASSIGN DEVICE
               </Typography>
+              {error && (
+                <Box
+                  mb="1rem"
+                  sx={{
+                    color: "#e87c03",
+                    display: "flex",
+                    // justifyContent: "center",
+                    gap: "0.5rem",
+                    alignItems: "center",
+                    borderRadius: "5px",
+                  }}
+                  p=".5rem"
+                >
+                  <ErrorIcon />
+                  {error}
+                </Box>
+              )}
               <Box
                 display="grid"
                 // placeItems="center"
@@ -145,7 +176,64 @@ const AssignDeviceForm = () => {
                   "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
                 }}
               >
-                HERE GOES THE FORM
+                <div
+                  style={{
+                    gridColumn: "span 4",
+                    width: "100%",
+                  }}
+                >
+                  <InputLabel id="tenantId">Tenants</InputLabel>
+                  <Select
+                    fullWidth
+                    variant="filled"
+                    // type="text"
+                    label="Tenants ID"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.tenant_id}
+                    name="tenant_id"
+                    labelId="Tenant"
+                    id="tenant_id"
+                    error={!!touched.tenant_id && !!errors.tenant_id}
+                    helperText={touched.tenant_id && errors.tenant_id}
+                    sx={{ gridColumn: "span 4" }}
+                  >
+                    {tenants.map((tenant, id) => (
+                      <MenuItem value={tenant.userId} key={id}>
+                        {tenant.firstName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div
+                  style={{
+                    gridColumn: "span 4",
+                    width: "100%",
+                  }}
+                >
+                  <InputLabel id="device_id">Devices</InputLabel>
+                  <Select
+                    fullWidth
+                    variant="filled"
+                    // type="text"
+                    label="Tenants ID"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.device_id}
+                    name="device_id"
+                    labelId="Tenant"
+                    id="device_id"
+                    error={!!touched.device_id && !!errors.device_id}
+                    helperText={touched.device_id && errors.device_id}
+                    sx={{ gridColumn: "span 4" }}
+                  >
+                    {devices.map((device, id) => (
+                      <MenuItem value={device.device_id} key={id}>
+                        {device.device_id}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
               </Box>
               <Box
                 display="flex"

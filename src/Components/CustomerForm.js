@@ -19,6 +19,7 @@ import Header from "./Header.js";
 import { useState } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
@@ -27,6 +28,7 @@ const CustomerForm = () => {
 	const isNonMobile = useMediaQuery("(min-width:650px)");
 
 	const dispatch = useDispatch();
+	const [error, setError] = useState("");
 	const [formData, setFormData] = useState(initialValues);
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
@@ -53,6 +55,7 @@ const CustomerForm = () => {
 			}
 		} catch (err) {
 			console.log(err);
+			setError(err.message);
 		}
 	};
 
@@ -111,6 +114,23 @@ const CustomerForm = () => {
 							>
 								CUSTOMER DETAILS
 							</Typography>
+							{error && (
+								<Box
+									mb="1rem"
+									sx={{
+										color: "#e87c03",
+										display: "flex",
+										// justifyContent: "center",
+										gap: "0.5rem",
+										alignItems: "center",
+										borderRadius: "5px",
+									}}
+									p=".5rem"
+								>
+									<ErrorIcon />
+									{error}
+								</Box>
+							)}
 							<Box
 								display="grid"
 								// placeItems="center"
@@ -353,32 +373,32 @@ const CustomerForm = () => {
 const phoneRegExp =
 	/^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
-	const checkoutSchema = yup.object().shape({
-		email: yup.string().email("invalid email").required("required"),
-		firstName: yup.string().required("required"),
-		lastName: yup.string().required("required"),
-		country: yup.string().required("required"),
-		state: yup.string().required("required"),
-		city: yup.string().required("required"),
-		zip: yup.string().required("required"),
-		address: yup.string().required("required"),
-		contact_number: yup
-			.string()
-			.matches(phoneRegExp, "Phone number is not valid")
-			.required("required"),
-		password: yup.string().required("required"),
-	});
-	const initialValues = {
-		email: "",
-		firstName: "",
-		lastName: "",
-		country: "",
-		state: "",
-		city: "",
-		zip: "",
-		address: "",
-		contact_number: "",
-		password: "",
-	};
+const checkoutSchema = yup.object().shape({
+	email: yup.string().email("invalid email").required("required"),
+	firstName: yup.string().required("required"),
+	lastName: yup.string().required("required"),
+	country: yup.string().required("required"),
+	state: yup.string().required("required"),
+	city: yup.string().required("required"),
+	zip: yup.string().required("required"),
+	address: yup.string().required("required"),
+	contact_number: yup
+		.string()
+		.matches(phoneRegExp, "Phone number is not valid")
+		.required("required"),
+	password: yup.string().required("required"),
+});
+const initialValues = {
+	email: "",
+	firstName: "",
+	lastName: "",
+	country: "",
+	state: "",
+	city: "",
+	zip: "",
+	address: "",
+	contact_number: "",
+	password: "",
+};
 
 export default CustomerForm;

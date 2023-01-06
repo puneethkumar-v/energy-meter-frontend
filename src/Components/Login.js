@@ -17,6 +17,7 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
@@ -118,7 +119,23 @@ const Login = () => {
               >
                 LOGIN
               </Typography>
-              {error && <Box>{error}</Box>}
+              {error && (
+                <Box
+                  mb="1rem"
+                  sx={{
+                    color: "#e87c03",
+                    display: "flex",
+                    // justifyContent: "center",
+                    gap: "0.5rem",
+                    alignItems: "center",
+                    borderRadius: "5px",
+                  }}
+                  p=".5rem"
+                >
+                  <ErrorIcon />
+                  {error}
+                </Box>
+              )}
               <Box
                 display="grid"
                 gap="30px"
