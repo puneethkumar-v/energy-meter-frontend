@@ -62,10 +62,11 @@ const Devices = () => {
   const getAllDevices = async () => {
     try {
       const { data } = await API.get("/device/get-all-devices");
-      console.log(data);
+      // console.log(data);
       console.log("hii");
       setArr(data);
-      console.log(arr);
+
+      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -94,7 +95,7 @@ const Devices = () => {
     // },
     {
       field: "client_topic",
-      headerName: "Clinet Topic",
+      headerName: "Client Topic",
       flex: 1,
       // type: "number",
       // headerAlign: "left",
@@ -137,7 +138,7 @@ const Devices = () => {
           )[0];
         }
 
-        console.log(currentDevice);
+        // console.log(currentDevice);
         // console.log({ currentDevice });
         // const currentIndex = index.api.getRowIndex(index.row.id);
 

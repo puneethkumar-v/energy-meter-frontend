@@ -14,6 +14,8 @@ import Login from "./Components/Login";
 import CustomerForm from "./Components/CustomerForm";
 import TenantForm from "./Components/TenantForm";
 import AssignDeviceForm from "./Components/AssignDeviceForm";
+import Customers from "./Components/Customers";
+import Tenants from "./Components/Tenants";
 // import Devices from "./Components/Devices";
 // import Graph from "./Components/Graph";
 
@@ -44,8 +46,10 @@ function App() {
               )}
 
               <Route path="/devices" element={<Devices />} />
+              <Route path="/customers" element={<Customers />} />
+              <Route path="/tenants" element={<Tenants />} />
               <Route path="/add-customer" element={<CustomerForm />} />
-              <Route path="/devices/:id" element={<Livechart />} />
+              <Route path="/devices/:device_id" element={<Livechart />} />
               <Route path="/login" element={<Login />} />
               <Route path="add-tenant" element={<TenantForm />} />
               <Route path="/add-device" element={<DeviceForm />} />

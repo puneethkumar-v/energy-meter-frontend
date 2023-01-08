@@ -34,7 +34,7 @@ const CustomerForm = () => {
 	const navigate = useNavigate();
 	// const user = JSON.parse(localStorage.getItem("profile"));
 	const colors = tokens(theme.palette.mode);
-	const handleFormSubmit = async (values) => {
+	const handleFormSubmit = async (values, { resetForm }) => {
 		// console.log(values);
 		// dispatch(adminregister(values));
 		try {
@@ -42,6 +42,7 @@ const CustomerForm = () => {
 			const { data } = await API.post("auth/register-customer", values);
 			// console.log(adminRegister);
 			setFormData(data);
+			resetForm({values: initialValues});
 			// localStorage.setItem("profiles", JSON.stringify(formData));
 			const emailConfirmation = await API.post(
 				"/auth/send-confirmation-email",

@@ -12,6 +12,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 // import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import ErrorIcon from "@mui/icons-material/Error";
+
 
 const DeviceForm = () => {
 	const [topics, setTopics] = useState([]);
@@ -56,12 +58,13 @@ const DeviceForm = () => {
 			setTopics(data);
 		})
 		.catch((err) => console.log(err));
-	const handleFormSubmit = async (values) => {
+	const handleFormSubmit = async (values, { resetForm }) => {
 		try {
 			setLoading(true);
 			const { data } = await API.post("/device/add", values);
 			// console.log(adminRegister);
 			// localStorage.setItem("profiles", JSON.stringify(data));
+			resetForm({values: initialValues})
 			console.log(data);
 			setLoading(false);
 		  } catch (err) {
@@ -129,7 +132,23 @@ const DeviceForm = () => {
 							>
 								DEVICE DETAILS
 							</Typography>
-							{error && <Box>{error}</Box>}
+							{error && (
+                <Box
+                  mb="1rem"
+                  sx={{
+                    color: "#e87c03",
+                    display: "flex",
+                    // justifyContent: "center",
+                    gap: "0.5rem",
+                    alignItems: "center",
+                    borderRadius: "5px",
+                  }}
+                  p=".5rem"
+                >
+                  <ErrorIcon />
+                  {error}
+                </Box>
+              )}
 							<Box
 								display="grid"
 								// placeItems="center"

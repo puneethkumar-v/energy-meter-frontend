@@ -21,6 +21,7 @@ import AddToQueueIcon from "@mui/icons-material/AddToQueue";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import QueuePlayNextIcon from "@mui/icons-material/QueuePlayNext";
 import axios from "axios";
+import PeopleIcon from '@mui/icons-material/People';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -45,7 +46,7 @@ const Sidebar = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [role, setRole] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Dashboard");
+  const [selected, setSelected] = useState("Devices");
   const user = JSON.parse(localStorage.getItem("profile"));
 
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
@@ -141,13 +142,13 @@ const Sidebar = () => {
           )}
 
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-            <Item
+            {/* <Item
               title="Dashboard"
               to="/"
               icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
             <Typography
               variant="h6"
@@ -178,7 +179,22 @@ const Sidebar = () => {
                 icon={<AddToQueueIcon />}
                 selected={selected}
                 setSelected={setSelected}
-              />
+              /> 
+              <Item
+              title="Customers List"
+              to="customers"
+              icon={<PeopleIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Tenants List"
+              to="tenants"
+              icon={<PeopleIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
             </>
             )}
             {
@@ -198,6 +214,13 @@ const Sidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
+                <Item
+              title="My Tenants"
+              to="tenants"
+              icon={<PeopleIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
               </>
               )
             }

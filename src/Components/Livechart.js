@@ -9,14 +9,16 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useParams } from "react-router-dom";
 
-function Livechart({ deviceid }) {
+function Livechart() {
   const [sensorNames, setSensorNames] = useState([]);
   const [readingTime, setReadingTime] = useState("");
   const [x_axis, setx_axis] = useState([]);
   const [y1_axis, sety1_axis] = useState([]);
   const [sensorType, setSensorType] = useState("Frequency");
   const [graphType, setGraphType] = useState("area");
+  const {device_id} = useParams();
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
   function get_y1_axis(y_val) {
     if (y1_axis.length < 6) {
@@ -34,17 +36,18 @@ function Livechart({ deviceid }) {
   // }
 
   API.post("/sensorValue/get-unique-sensor-names", {
-    deviceId: "MQI1-90-38-0C-57-57-F4",
+    deviceId: device_id,
   })
     .then(({ data }) => {
       setSensorNames(data);
+      console.log(data);
       // setSensorType(() => data[0]);
     })
     .catch((err) => console.log(err));
 
   async function fetch_freq() {
     const { data } = await API.post("/sensorValue/get-data", {
-      deviceId: "MQI1-90-38-0C-57-57-F4",
+      deviceId: device_id,
       parameter: sensorType || "Frequency",
       // parameter: "Frequency",
     });

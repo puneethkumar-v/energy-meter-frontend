@@ -50,7 +50,7 @@ const Login = () => {
       localStorage.setItem("profile", JSON.stringify(profile));
 
       setIsActive(true);
-      window.location.href = "/";
+      window.location.href = "/devices";
       setLoading(false);
       // let profiles = JSON.parse(localStorage.getItem("profiles"));
       // if (profiles.email == values.email) {

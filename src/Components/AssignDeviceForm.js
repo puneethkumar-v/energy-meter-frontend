@@ -85,7 +85,7 @@ const AssignDeviceForm = () => {
 
   const handleFormSubmit = async (values, { resetForm }) => {
     try {
-      const data = await assignDeviceToTenant(values);
+      const {data} = await assignDeviceToTenant(values);
       resetForm({ values: initialValues });
     } catch (err) {
       console.log(err);

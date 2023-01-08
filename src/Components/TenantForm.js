@@ -6,6 +6,7 @@ import {
 	useTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
+import ErrorIcon from "@mui/icons-material/Error";
 import { Formik } from "formik";
 import * as yup from "yup";
 import React from "react";
@@ -28,11 +29,12 @@ const TenantForm = () => {
 
 	const dispatch = useDispatch();
 	const [formData, setFormData] = useState(initialValues);
+	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 	// const user = JSON.parse(localStorage.getItem("profile"));
 	const colors = tokens(theme.palette.mode);
-	const handleFormSubmit = async (values) => {
+	const handleFormSubmit = async (values, { resetForm }) => {
 		// console.log(values);
 		// dispatch(adminregister(values));
 		try {
@@ -40,6 +42,7 @@ const TenantForm = () => {
 			const { data } = await API.post("auth/register-tenant", values);
 			// console.log(adminRegister);
 			setFormData(data);
+			resetForm({values: initialValues})
 			// localStorage.setItem("profiles", JSON.stringify(formData));
 			const emailConfirmation = await API.post(
 				"/auth/send-confirmation-email",
@@ -53,6 +56,7 @@ const TenantForm = () => {
 			}
 		} catch (err) {
 			console.log(err);
+			setError(err.message);
 		}
 	};
 
@@ -111,6 +115,23 @@ const TenantForm = () => {
 							>
 								TENANT DETAILS
 							</Typography>
+							{error && (
+                <Box
+                  mb="1rem"
+                  sx={{
+                    color: "#e87c03",
+                    display: "flex",
+                    // justifyContent: "center",
+                    gap: "0.5rem",
+                    alignItems: "center",
+                    borderRadius: "5px",
+                  }}
+                  p=".5rem"
+                >
+                  <ErrorIcon />
+                  {error}
+                </Box>
+              )}
 							<Box
 								display="grid"
 								// placeItems="center"
