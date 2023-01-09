@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -21,7 +21,7 @@ import AddToQueueIcon from "@mui/icons-material/AddToQueue";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import QueuePlayNextIcon from "@mui/icons-material/QueuePlayNext";
 import axios from "axios";
-import PeopleIcon from '@mui/icons-material/People';
+import PeopleIcon from "@mui/icons-material/People";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -33,7 +33,8 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
         color: colors.grey[100],
       }}
       onClick={() => setSelected(title)}
-      icon={icon}>
+      icon={icon}
+    >
       <Typography>{title}</Typography>
       <Link to={to} />
     </MenuItem>
@@ -46,7 +47,7 @@ const Sidebar = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [role, setRole] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Devices");
+  const [selected, setSelected] = useState("");
   const user = JSON.parse(localStorage.getItem("profile"));
 
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
@@ -60,11 +61,14 @@ const Sidebar = () => {
     return req;
   });
 
+  useEffect(() => {
+    setSelected(() => (isAdmin ? "Devices" : "My Devices"));
+  }, [isAdmin]);
   API.get("auth/my-role", {
-    headers: {}
+    headers: {},
   })
-  .then(({data}) => setRole(data.role))
-  .catch((err) => console.log(err));
+    .then(({ data }) => setRole(data.role))
+    .catch((err) => console.log(err));
   API.get("/auth/is-admin", {
     headers: {},
   })
@@ -88,7 +92,8 @@ const Sidebar = () => {
         "& .pro-menu-item.active": {
           color: "#6870fa !important",
         },
-      }}>
+      }}
+    >
       <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
@@ -98,13 +103,15 @@ const Sidebar = () => {
             style={{
               margin: "10px 0 20px 0",
               color: colors.grey[100],
-            }}>
+            }}
+          >
             {!isCollapsed && (
               <Box
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                ml="15px">
+                ml="15px"
+              >
                 <Typography variant="h3" color={colors.grey[100]}>
                   EAPL
                 </Typography>
@@ -131,7 +138,8 @@ const Sidebar = () => {
                   variant="h2"
                   color={colors.grey[100]}
                   fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}>
+                  sx={{ m: "10px 0 0 0" }}
+                >
                   {user.firstName.toUpperCase() || "Not Found"}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
@@ -153,7 +161,8 @@ const Sidebar = () => {
             <Typography
               variant="h6"
               color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}>
+              sx={{ m: "15px 0 5px 20px" }}
+            >
               Data
             </Typography>
             <Item
@@ -166,40 +175,38 @@ const Sidebar = () => {
 
             {role === "ADMIN" && (
               <>
-              <Item
-                title="Add Customer"
-                to="add-customer"
-                icon={<PersonAddAltIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="Add Devices"
-                to="add-device"
-                icon={<AddToQueueIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              /> 
-              <Item
-              title="Customers List"
-              to="customers"
-              icon={<PeopleIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Tenants List"
-              to="tenants"
-              icon={<PeopleIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            </>
+                <Item
+                  title="Add Customer"
+                  to="add-customer"
+                  icon={<PersonAddAltIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Add Devices"
+                  to="add-device"
+                  icon={<AddToQueueIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Customers List"
+                  to="customers"
+                  icon={<PeopleIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Tenants List"
+                  to="tenants"
+                  icon={<PeopleIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </>
             )}
-            {
-              role === "CUSTOMER" && (
-                <>
+            {role === "CUSTOMER" && (
+              <>
                 <Item
                   title="Add Tenant"
                   to="add-tenant"
@@ -215,15 +222,14 @@ const Sidebar = () => {
                   setSelected={setSelected}
                 />
                 <Item
-              title="My Tenants"
-              to="tenants"
-              icon={<PeopleIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+                  title="My Tenants"
+                  to="tenants"
+                  icon={<PeopleIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
               </>
-              )
-            }
+            )}
             {/* <Item
               title="Contacts Information"
               to="/contacts"

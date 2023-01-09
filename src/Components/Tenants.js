@@ -32,37 +32,44 @@ const Tenants = () => {
   })
     .then(({ data }) => setIsAdmin(data.isAdmin))
     .catch((err) => console.log(err));
-    console.log(profile.userId);
-    
+  // console.log(profile.userId);
+
   const getProfile = async () => {
-    const {data} = await API.get("/profile/me");
+    const { data } = await API.get("/profile/me");
     setProfile(data);
-  }
-  
-  useEffect(() => {getProfile()}, [])
-      
+    console.log("profile", profile);
+    // console.log(data);
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
   const getAllTenants = async () => {
     try {
-        const {data} = await API.get("/tenant/get-all");
-        console.log(data);
-        setTenantTable(data);
-    } catch(err) {
-        console.log(err);
+      const { data } = await API.get("/tenant/get-all");
+      console.log(data);
+      setTenantTable(data);
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
   const getMyTenants = async () => {
     try {
-        const {data} = await API.post("/tenant/get", {
-            customerId: profile.userId
-        });
-        
-        setMyTenants(data);
-    } catch(err) {
-        console.log(err);
-    }
-  }
+      const { data } = await API.post("/tenant/get-by-customer-id", {
+        customerId: profile.userId,
+      });
+      // console.log(data);
 
-  useEffect(() => {isAdmin  ? getAllTenants() : getMyTenants()}, [])
+      setMyTenants(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    isAdmin ? getAllTenants() : getMyTenants();
+  }, []);
 
   const columns = [
     // { field: "sl_no", headerName: "SL. NO" },
@@ -74,39 +81,40 @@ const Tenants = () => {
     //   cellClassName: "name-column--cell",
     // },
     {
-        field: "firstName",
-        headerName: "First Name",
-
-      // type: "number",
-      // headerAlign: "left",
-      // align: "left",
-    },{
-        field: "lastName",
-        headerName: "Last Name",
+      field: "firstName",
+      headerName: "First Name",
 
       // type: "number",
       // headerAlign: "left",
       // align: "left",
     },
     {
-        field: "email",
-        headerName: "Email",
-        flex: 1,
+      field: "lastName",
+      headerName: "Last Name",
+
+      // type: "number",
+      // headerAlign: "left",
+      // align: "left",
     },
     {
-        field: "contact_number",
+      field: "email",
+      headerName: "Email",
+      flex: 1,
+    },
+    {
+      field: "contact_number",
       headerName: "Contact Number",
       flex: 1,
     },
     {
-        field: "address",
-        headerName: "Address",
-        flex: 1,
+      field: "address",
+      headerName: "Address",
+      flex: 1,
       // type: "number",
       // headerAlign: "left",
       // align: "left",
     },
-    
+
     // {
     //   field: "phone",
     //   headerName: "Phone Number",
@@ -117,10 +125,7 @@ const Tenants = () => {
     //   headerName: "Email",
     //   flex: 1,
     // },
-
   ];
-
-
 
   return (
     <Box m="20px">
@@ -153,15 +158,15 @@ const Tenants = () => {
             color: `${colors.greenAccent[200]} !important`,
           },
         }}
-      >{
-        <DataGrid
-          checkboxSelection
-          rows={isAdmin? tenantTable : myTenants}
-          columns={columns}
-          getRowId={(row) => row.userId}
-        />
-      }
-        
+      >
+        {
+          <DataGrid
+            checkboxSelection
+            rows={isAdmin ? tenantTable : myTenants}
+            columns={columns}
+            getRowId={(row) => row.userId}
+          />
+        }
       </Box>
     </Box>
   );

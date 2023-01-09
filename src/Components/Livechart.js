@@ -18,7 +18,7 @@ function Livechart() {
   const [y1_axis, sety1_axis] = useState([]);
   const [sensorType, setSensorType] = useState("Frequency");
   const [graphType, setGraphType] = useState("area");
-  const {device_id} = useParams();
+  const { device_id } = useParams();
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
   function get_y1_axis(y_val) {
     if (y1_axis.length < 6) {
@@ -34,16 +34,21 @@ function Livechart() {
   //     sety2_axis([...y2_axis.slice(1), y_val]);
   //   }
   // }
-
-  API.post("/sensorValue/get-unique-sensor-names", {
-    deviceId: device_id,
-  })
-    .then(({ data }) => {
-      setSensorNames(data);
+  const getUniqueSensorNames = async () => {
+    try {
+      const { data } = await API.post("/sensorValue/get-unique-sensor-names", {
+        deviceId: device_id,
+      });
       console.log(data);
-      // setSensorType(() => data[0]);
-    })
-    .catch((err) => console.log(err));
+      setSensorNames(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getUniqueSensorNames();
+  }, [sensorType, sensorNames]);
 
   async function fetch_freq() {
     const { data } = await API.post("/sensorValue/get-data", {
@@ -219,7 +224,8 @@ function Livechart() {
           labelId="Sensor Type"
           id="sensor-type"
           value={sensorType}
-          onChange={handleChange}>
+          onChange={handleChange}
+        >
           {sensorNames.map((sensor) => (
             <MenuItem key={sensor} value={sensor}>
               {sensor}
@@ -233,7 +239,8 @@ function Livechart() {
           labelId="Graph Type"
           id="graph-type"
           value={graphType}
-          onChange={handleGraphType}>
+          onChange={handleGraphType}
+        >
           <MenuItem value="area">Area</MenuItem>
           <MenuItem value="line">Line</MenuItem>
           <MenuItem value="bar">Bar</MenuItem>
@@ -245,7 +252,8 @@ function Livechart() {
         style={{ textAlign: "left" }}
         mt="2rem"
         ml="2rem"
-        mb="-1.5rem">
+        mb="-1.5rem"
+      >
         {sensorType}
       </Typography>
       <br />
