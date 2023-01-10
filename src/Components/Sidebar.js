@@ -22,6 +22,7 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import QueuePlayNextIcon from "@mui/icons-material/QueuePlayNext";
 import axios from "axios";
 import PeopleIcon from "@mui/icons-material/People";
+import EdgesensorHighIcon from '@mui/icons-material/EdgesensorHigh';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -47,7 +48,7 @@ const Sidebar = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [role, setRole] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState("Devices");
   const user = JSON.parse(localStorage.getItem("profile"));
 
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
@@ -61,9 +62,7 @@ const Sidebar = () => {
     return req;
   });
 
-  useEffect(() => {
-    setSelected(() => (isAdmin ? "Devices" : "My Devices"));
-  }, [isAdmin]);
+  
   API.get("auth/my-role", {
     headers: {},
   })
@@ -203,6 +202,21 @@ const Sidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
+                <Item
+                  title="Sensor Master"
+                  to="sensor-master"
+                  icon={<EdgesensorHighIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Sensors List"
+                  to="sensor-list"
+                  icon={<EdgesensorHighIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                
               </>
             )}
             {role === "CUSTOMER" && (

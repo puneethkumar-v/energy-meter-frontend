@@ -34,15 +34,27 @@ const TenantForm = () => {
 	const navigate = useNavigate();
 	// const user = JSON.parse(localStorage.getItem("profile"));
 	const colors = tokens(theme.palette.mode);
+
+	API.interceptors.request.use((req) => {
+		if (localStorage.getItem("profile")) {
+			req.headers.authorization = `Bearer ${
+				JSON.parse(localStorage.getItem("profile")).accessToken
+			}`;
+		}
+
+		return req;
+	});
 	const handleFormSubmit = async (values, { resetForm }) => {
 		// console.log(values);
 		// dispatch(adminregister(values));
 		try {
 			setLoading(true);
-			const { data } = await API.post("auth/register-tenant", values);
+			console.log(values);
+			const { data } = await API.post("/auth/register-tenant", values);
 			// console.log(adminRegister);
+			console.log(data);
 			setFormData(data);
-			resetForm({values: initialValues})
+			resetForm({values: initialValues});
 			// localStorage.setItem("profiles", JSON.stringify(formData));
 			const emailConfirmation = await API.post(
 				"/auth/send-confirmation-email",
@@ -51,7 +63,7 @@ const TenantForm = () => {
 				}
 			);
 			setLoading(false);
-			if (emailConfirmation.status === 200) {
+			if (emailConfirmation.status == 200) {
 				console.log("Done");
 			}
 		} catch (err) {

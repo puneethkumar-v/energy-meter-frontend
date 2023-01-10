@@ -63,7 +63,6 @@ const Devices = () => {
     try {
       const { data } = await API.get("/device/get-all-devices");
       // console.log(data);
-      console.log("hii");
       setArr(data);
 
       console.log(data);

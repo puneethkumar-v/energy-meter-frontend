@@ -56,9 +56,11 @@ const AssignDeviceForm = () => {
 
   const getTenants = async () => {
     const result = await API.get("/profile/me");
-    const { data } = await API.post("/tenant/get", {
-      customerId: result.data.userId,
+    console.log("data" , result.data.userId);
+    const { data } = await API.post("/tenant/get-by-customer-id", {
+      "customerId": result.data.userId,
     });
+    console.log(data);
     setTenants(data);
   };
 
@@ -73,6 +75,7 @@ const AssignDeviceForm = () => {
   const getMyDevices = async () => {
     const { data } = await API.get("/device/get-my-devices");
     // devices = await data;
+    // console.log("data", data);
     setDevices(data);
     // console.log(data);
   };

@@ -14,7 +14,7 @@ const Tenants = () => {
   const colors = tokens(theme.palette.mode);
   const [tenantTable, setTenantTable] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [profile, setProfile] = useState({});
+  // const [profile, setProfile] = useState({});
   const [myTenants, setMyTenants] = useState([]);
 
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
@@ -36,11 +36,14 @@ const Tenants = () => {
 
   const getProfile = async () => {
     const { data } = await API.get("/profile/me");
-    setProfile(data);
-    console.log("profile", profile);
+    // console.log(data);
+    // setProfile(data);
+    return data;
+    // console.log("profile", profile);
     // console.log(data);
   };
 
+  // getProfile();
   useEffect(() => {
     getProfile();
   }, []);
@@ -48,7 +51,7 @@ const Tenants = () => {
   const getAllTenants = async () => {
     try {
       const { data } = await API.get("/tenant/get-all");
-      console.log(data);
+      console.log("data", data);
       setTenantTable(data);
     } catch (err) {
       console.log(err);
@@ -56,10 +59,12 @@ const Tenants = () => {
   };
   const getMyTenants = async () => {
     try {
+      const profile = await getProfile();
+      // console.log("profiles", profile)
       const { data } = await API.post("/tenant/get-by-customer-id", {
-        customerId: profile.userId,
+        "customerId": profile.userId,
       });
-      // console.log(data);
+      // console.log("data", data);
 
       setMyTenants(data);
     } catch (err) {
@@ -68,8 +73,9 @@ const Tenants = () => {
   };
 
   useEffect(() => {
+    console.log(isAdmin)
     isAdmin ? getAllTenants() : getMyTenants();
-  }, []);
+  }, [isAdmin]);
 
   const columns = [
     // { field: "sl_no", headerName: "SL. NO" },
@@ -102,7 +108,7 @@ const Tenants = () => {
       flex: 1,
     },
     {
-      field: "contact_number",
+      field: "contactNumber",
       headerName: "Contact Number",
       flex: 1,
     },

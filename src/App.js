@@ -16,6 +16,8 @@ import TenantForm from "./Components/TenantForm";
 import AssignDeviceForm from "./Components/AssignDeviceForm";
 import Customers from "./Components/Customers";
 import Tenants from "./Components/Tenants";
+import SensorMaster from "./Components/SensorMaster";
+import SensorsList from "./Components/SensorsList";
 // import Devices from "./Components/Devices";
 // import Graph from "./Components/Graph";
 
@@ -52,8 +54,10 @@ function App() {
               <Route path="/devices/:device_id" element={<Livechart />} />
               <Route path="/login" element={<Login />} />
               <Route path="add-tenant" element={<TenantForm />} />
+              <Route path="sensor-master" element={<SensorMaster />} />
               <Route path="/add-device" element={<DeviceForm />} />
               <Route path="/assign-device" element={<AssignDeviceForm />} />
+              <Route path="/sensor-list" element={<SensorsList />} />
               {/* <Route path="/home" element={<Home />} /> */}
             </Routes>
           </main>
