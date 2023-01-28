@@ -58,7 +58,7 @@ function App() {
               <Route path="/add-device" element={<DeviceForm />} />
               <Route path="/assign-device" element={<AssignDeviceForm />} />
               <Route path="/sensor-list" element={<SensorsList />} />
-              {/* <Route path="/home" element={<Home />} /> */}
+              <Route path="/home" element={<Home />} />
             </Routes>
           </main>
         </div>

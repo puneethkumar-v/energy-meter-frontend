@@ -65,7 +65,7 @@ const Devices = () => {
       // console.log(data);
       setArr(data);
 
-      console.log(data);
+      // console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -170,6 +170,7 @@ const Devices = () => {
           //   <Button variant="contained">Open</Button>
           // </Box>
           <>
+            {/* {console.log("currentDevice", currentDevice)} */}
             <Link
               to={currentDevice.device_id}
               style={{ textDecoration: "none" }}
