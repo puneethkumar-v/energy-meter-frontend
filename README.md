@@ -61,6 +61,7 @@ After you have pushed the changes to the branch you have created wait for someti
       - [x] Customer
       - [x] Assets
       - [x] Add Device
+      - [x] Setting Sensors to the device
       - [x] Devices
         - [x] Device Table
           - [x] Device Each Sensor Graph
