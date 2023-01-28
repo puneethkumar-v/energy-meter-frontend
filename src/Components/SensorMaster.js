@@ -27,13 +27,14 @@ import { useState } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { CheckboxWithLabel } from "formik-material-ui";
+import { MultiSelect } from "react-multi-select-component";
 
 const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
 const SensorMaster = () => {
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(min-width:650px)");
-
+  let arr = [];
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(initialValues);
   const [error, setError] = useState("");
@@ -43,6 +44,34 @@ const SensorMaster = () => {
   const [allSensorTypes, setAllSensorTypes] = useState([]);
   // const user = JSON.parse(localStorage.getItem("profile"));
   const colors = tokens(theme.palette.mode);
+
+  const options = [
+    {
+      label: "Frequency",
+      value: {
+        name: "PK",
+        age: 22,
+      },
+    },
+    {
+      label: "Volume",
+      value: {
+        name: "KP",
+        age: 22,
+      },
+    },
+    {
+      label: "SOmehi",
+      value: {
+        name: "RP",
+        age: 22,
+      },
+    },
+  ];
+
+  const [selected, setSelected] = useState([]);
+  // setSelected(initialValues.numbers.push(selected))
+  // selected.map((sensor) => console.log(sensor.value));
 
   API.interceptors.request.use((req) => {
     if (localStorage.getItem("profile")) {
@@ -62,7 +91,35 @@ const SensorMaster = () => {
   const getAllSensorTypes = async () => {
     try {
       const { data } = await API.get("/sensorType/get");
-      setAllSensorTypes(data);
+      // setAllSensorTypes(data);
+      // console.log("sensorTypes", data[0].sensor_name);
+
+      // data.map((sensor) => {
+      //   setAllSensorTypes(...allSensorTypes, {
+      //     label: sensor.sensor_name,
+      //     value: {
+      //       sensor_idx: sensor.sensor_idx,
+      //       sensor_uom: sensor.sensor_uom,
+      //       sensor_name: sensor.sensor_name,
+      //       sensor_report_group: sensor.sensor_report_group,
+      //     },
+      //   });
+      // });
+      let tempArray = [];
+      for (let i = 0; i < data.length; i++) {
+        const getAllData = {
+          label: `${data[i].sensor_name}`,
+          value: {
+            sensor_idx: `${data[i].sensor_idx}`,
+            sensor_uom: `${data[i].sensor_uom}`,
+            sensor_name: `${data[i].sensor_name}`,
+            sensor_report_group: `${data[i].sensor_report_group}`,
+          },
+        };
+        tempArray.push(getAllData);
+      }
+      setAllSensorTypes(tempArray);
+      // console.log(allSensorTypes);
     } catch (err) {
       console.log(err);
     }
@@ -70,9 +127,9 @@ const SensorMaster = () => {
   const getAllDevices = async () => {
     try {
       const { data } = await API.get("/device/get-all-devices");
-      console.log(data);
+      // console.log(data);
       setAllDevices(data);
-      console.log(data);
+      // console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -83,40 +140,30 @@ const SensorMaster = () => {
     getAllSensorTypes();
   }, []);
   const handleFormSubmit = async (values, { resetForm }) => {
-    // console.log(values);
-    // dispatch(adminregister(values));
-    // try {
-    //   setLoading(true);
-    //   console.log(values);
-    //   const { data } = await API.post("/sensorMaster/add", values);
-    //   resetForm({ values: initialValues });
-    //   setLoading(false);
-    // } catch (err) {
-    //   console.log(err);
-    //   setError(err.message);
-    // }
-    console.log(values);
-    let arrayOfUniqueSensors = [];
-    for (let i = 0; i < values.numbers.length; i++) {
-      for (let j = 0; j < allSensorTypes.length; j++) {
-        if (allSensorTypes[j].sensor_name === values.numbers[i]) {
-          arrayOfUniqueSensors.push(allSensorTypes[j]);
-        }
-      }
-    }
     try {
       setLoading(true);
-      arrayOfUniqueSensors.map(async (sensor) => {
-        const { data } = await API.post("/sensorMaster/add", {
+      // arrayOfUniqueSensors.map(async (sensor) => {
+      //   const { data } = await API.post("/sensorMaster/add", {
+      //     device_id: values.device_id,
+      //     sensor_idx: sensor.sensor_idx,
+      //     sensor_name: sensor.sensor_name,
+      //     sensor_uom: sensor.sensor_uom,
+      //     sensor_report_group: sensor.sensor_report_group,
+      //   });
+      // });
+      selected.map(async (val) => {
+        let actualValue = {
           device_id: values.device_id,
-          sensor_idx: sensor.sensor_idx,
-          sensor_name: sensor.sensor_name,
-          sensor_uom: sensor.sensor_uom,
-          sensor_report_group: sensor.sensor_report_group,
-        });
+          sensor_idx: val.value.sensor_idx,
+          sensor_name: val.value.sensor_name,
+          sensor_uom: val.value.sensor_uom,
+          sensor_report_group: val.value.sensor_report_group,
+        };
+        const { data } = await API.post("/sensorMaster/add", actualValue);
+        console.log(data);
       });
-
       resetForm({ values: initialValues });
+      setSelected([]);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -221,32 +268,6 @@ const SensorMaster = () => {
                   "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
                 }}
               >
-                {/* <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="First Name"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.firstName}
-                name="firstName"
-                error={!!touched.firstName && !!errors.firstName}
-                helperText={touched.firstName && errors.firstName}
-                sx={{ gridColumn: "span 2" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Last Name"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.lastName}
-                name="lastName"
-                error={!!touched.lastName && !!errors.lastName}
-                helperText={touched.lastName && errors.lastName}
-                sx={{ gridColumn: "span 2" }}
-              /> */}
                 <div
                   style={{
                     // gridColumn: "span 4",
@@ -275,69 +296,18 @@ const SensorMaster = () => {
                     ))}
                   </Select>
                 </div>
-                <div style={{ width: "100%" }}>
-                  <FormGroup fullWidth>
-                    {allSensorTypes.map((opt) => (
-                      <Field
-                        fullWidth
-                        type="checkbox"
-                        component={CheckboxWithLabel}
-                        name="numbers"
-                        key={opt.sensor_name}
-                        value={opt.sensor_name}
-                        Label={{ label: opt.sensor_name }}
-                      />
-                    ))}
-                  </FormGroup>
+
+                <div>
+                  <InputLabel id="sensor_list" sx={{ marginTop: "1.2rem" }}>
+                    Sensors List
+                  </InputLabel>
+                  <MultiSelect
+                    options={allSensorTypes}
+                    value={selected}
+                    onChange={setSelected}
+                    labelledBy="Select"
+                  />
                 </div>
-                {/* <Checkbox
-                  value={values.val}
-                  name="val"
-                  id="val"
-                  onChange={(e) => e.target.checked}
-                  onBlur={handleBlur}
-                  error={!!touched.val && !!errors.val}
-                  helperText={touched.val && errors.val}
-                /> */}
-                {/* <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Contact Number"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.contact}
-                name="contact"
-                error={!!touched.contact && !!errors.contact}
-                helperText={touched.contact && errors.contact}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Address 1"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.address1}
-                name="address1"
-                error={!!touched.address1 && !!errors.address1}
-                helperText={touched.address1 && errors.address1}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Address 2"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.address2}
-                name="address2"
-                error={!!touched.address2 && !!errors.address2}
-                helperText={touched.address2 && errors.address2}
-                sx={{ gridColumn: "span 4" }}
-              /> */}
               </Box>
               <Box
                 display="flex"
