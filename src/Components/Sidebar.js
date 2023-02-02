@@ -22,7 +22,7 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import QueuePlayNextIcon from "@mui/icons-material/QueuePlayNext";
 import axios from "axios";
 import PeopleIcon from "@mui/icons-material/People";
-import EdgesensorHighIcon from '@mui/icons-material/EdgesensorHigh';
+import EdgesensorHighIcon from "@mui/icons-material/EdgesensorHigh";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -62,7 +62,6 @@ const Sidebar = () => {
     return req;
   });
 
-  
   API.get("auth/my-role", {
     headers: {},
   })
@@ -216,7 +215,13 @@ const Sidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
-                
+                <Item
+                  title="Generate Report"
+                  to="report"
+                  icon={<EdgesensorHighIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
               </>
             )}
             {role === "CUSTOMER" && (

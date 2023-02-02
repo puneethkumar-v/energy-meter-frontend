@@ -18,6 +18,7 @@ import Customers from "./Components/Customers";
 import Tenants from "./Components/Tenants";
 import SensorMaster from "./Components/SensorMaster";
 import SensorsList from "./Components/SensorsList";
+import Report from "./Components/Report";
 // import Devices from "./Components/Devices";
 // import Graph from "./Components/Graph";
 
@@ -56,6 +57,7 @@ function App() {
               <Route path="add-tenant" element={<TenantForm />} />
               <Route path="sensor-master" element={<SensorMaster />} />
               <Route path="/add-device" element={<DeviceForm />} />
+              <Route path="/report" element={<Report />} />
               <Route path="/assign-device" element={<AssignDeviceForm />} />
               <Route path="/sensor-list" element={<SensorsList />} />
               <Route path="/home" element={<Home />} />

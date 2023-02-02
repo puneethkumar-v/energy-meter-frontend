@@ -45,30 +45,6 @@ const SensorMaster = () => {
   // const user = JSON.parse(localStorage.getItem("profile"));
   const colors = tokens(theme.palette.mode);
 
-  const options = [
-    {
-      label: "Frequency",
-      value: {
-        name: "PK",
-        age: 22,
-      },
-    },
-    {
-      label: "Volume",
-      value: {
-        name: "KP",
-        age: 22,
-      },
-    },
-    {
-      label: "SOmehi",
-      value: {
-        name: "RP",
-        age: 22,
-      },
-    },
-  ];
-
   const [selected, setSelected] = useState([]);
   // setSelected(initialValues.numbers.push(selected))
   // selected.map((sensor) => console.log(sensor.value));
