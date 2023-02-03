@@ -63,6 +63,7 @@ export default function Report() {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     // console.log("fromDate", fromDate && getDate(fromDate));
     // console.log("toDate", toDate && getDate(toDate));
@@ -74,8 +75,10 @@ export default function Report() {
       const { data } = await API.post("/report/between-dates", obj, {
         responseType: "blob", // had to add this one here
       });
-      const res = window.open(URL.createObjectURL(data));
-      console.log(res);
+      console.log(data);
+      window.open(URL.createObjectURL(data));
+      // console.log(res);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
