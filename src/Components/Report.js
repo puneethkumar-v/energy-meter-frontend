@@ -17,6 +17,9 @@ import { useState } from "react";
 import ErrorIcon from "@mui/icons-material/Error";
 import { tokens } from "../theme";
 import dayjs from "dayjs";
+import axios from "axios";
+
+const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
 export default function Report() {
   const theme = useTheme();
@@ -25,10 +28,26 @@ export default function Report() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   // const user = JSON.parse(localStorage.getItem("profile"));
+  const [admin, setIsAdmin] = useState(false);
   const colors = tokens(theme.palette.mode);
 
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
+
+  API.interceptors.request.use((req) => {
+    if (localStorage.getItem("profile")) {
+      req.headers.authorization = `Bearer ${
+        JSON.parse(localStorage.getItem("profile")).accessToken
+      }`;
+    }
+
+    return req;
+  });
+  API.get("/auth/is-admin", {
+    headers: {},
+  })
+    .then(({ data }) => setIsAdmin(data.isAdmin))
+    .catch((err) => console.log(err));
 
   const getDate = (value) => {
     let date = `${new Date(value.$d).getDate()}`;
@@ -43,7 +62,7 @@ export default function Report() {
     return `${year}-${month}-${date}`;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log("fromDate", fromDate && getDate(fromDate));
     // console.log("toDate", toDate && getDate(toDate));
@@ -51,7 +70,15 @@ export default function Report() {
       fromDate: getDate(fromDate),
       toDate: getDate(toDate),
     };
-    console.log(obj);
+    try {
+      const { data } = await API.post("/report/between-dates", obj, {
+        responseType: "blob", // had to add this one here
+      });
+      const res = window.open(URL.createObjectURL(data));
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -126,20 +153,16 @@ export default function Report() {
             <LocalizationProvider
               dateAdapter={AdapterDayjs}
               sx={{
-                "& .MuiFormControl-root ": {
-                  minWidth: 0,
-                  width: "100%  !important",
-                },
+                minWidth: 0,
+                width: "100%  !important",
               }}
             >
               <DatePicker
                 label="From Date"
                 value={fromDate}
                 sx={{
-                  "& .MuiFormControl-root ": {
-                    minWidth: 0,
-                    width: "100%  !important",
-                  },
+                  minWidth: 0,
+                  width: "100%  !important",
                 }}
                 mb="2rem"
                 // minDate={dayjs("2012-03-01")}
@@ -153,14 +176,11 @@ export default function Report() {
               <DatePicker
                 label="To Date"
                 sx={{
-                  "& .MuiFormControl-root ": {
-                    minWidth: 0,
-                    width: "100%  !important",
-                  },
+                  minWidth: 0,
+                  width: "100%  !important",
                 }}
                 value={toDate}
-                minDate={dayjs("2012-03-01")}
-                maxDate={dayjs("2023-06-01")}
+                maxDate={dayjs(new Date())}
                 onChange={(newValue) => {
                   setToDate(newValue);
                 }}

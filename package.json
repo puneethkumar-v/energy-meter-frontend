@@ -19,6 +19,7 @@
     "axios": "^1.2.0",
     "chart.js": "^3.9.1",
     "dayjs": "^1.11.7",
+    "downloadjs": "^1.4.7",
     "formik": "^2.2.9",
     "formik-material-ui": "^4.0.0-alpha.2",
     "react": "^18.2.0",
