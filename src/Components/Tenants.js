@@ -62,7 +62,7 @@ const Tenants = () => {
       const profile = await getProfile();
       // console.log("profiles", profile)
       const { data } = await API.post("/tenant/get-by-customer-id", {
-        "customerId": profile.userId,
+        customerId: profile.userId,
       });
       // console.log("data", data);
 
@@ -73,7 +73,7 @@ const Tenants = () => {
   };
 
   useEffect(() => {
-    console.log(isAdmin)
+    console.log(isAdmin);
     isAdmin ? getAllTenants() : getMyTenants();
   }, [isAdmin]);
 

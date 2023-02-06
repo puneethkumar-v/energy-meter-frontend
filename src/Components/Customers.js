@@ -32,22 +32,20 @@ const Customers = () => {
   })
     .then(({ data }) => setIsAdmin(data.isAdmin))
     .catch((err) => console.log(err));
-  
-    
-    
-  
-      
+
   const getAllCustomers = async () => {
     try {
-        const {data} = await API.get("/customer/get-all");
-        console.log(data);
-        setCustomerTable(data);
-    } catch(err) {
-        console.log(err);
+      const { data } = await API.get("/customer/get-all");
+      console.log(data);
+      setCustomerTable(data);
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
 
-  useEffect(() => {getAllCustomers()}, [])
+  useEffect(() => {
+    getAllCustomers();
+  }, []);
 
   const columns = [
     // { field: "sl_no", headerName: "SL. NO" },
@@ -59,39 +57,40 @@ const Customers = () => {
     //   cellClassName: "name-column--cell",
     // },
     {
-        field: "firstName",
-        headerName: "First Name",
-
-      // type: "number",
-      // headerAlign: "left",
-      // align: "left",
-    },{
-        field: "lastName",
-        headerName: "Last Name",
+      field: "firstName",
+      headerName: "First Name",
 
       // type: "number",
       // headerAlign: "left",
       // align: "left",
     },
     {
-        field: "email",
-        headerName: "Email",
-        flex: 1,
+      field: "lastName",
+      headerName: "Last Name",
+
+      // type: "number",
+      // headerAlign: "left",
+      // align: "left",
     },
     {
-        field: "contact_number",
+      field: "email",
+      headerName: "Email",
+      flex: 1,
+    },
+    {
+      field: "contact_number",
       headerName: "Contact Number",
       flex: 1,
     },
     {
-        field: "address",
-        headerName: "Address",
-        flex: 1,
+      field: "address",
+      headerName: "Address",
+      flex: 1,
       // type: "number",
       // headerAlign: "left",
       // align: "left",
     },
-    
+
     // {
     //   field: "phone",
     //   headerName: "Phone Number",
@@ -102,10 +101,7 @@ const Customers = () => {
     //   headerName: "Email",
     //   flex: 1,
     // },
-
   ];
-
-
 
   return (
     <Box m="20px">
@@ -138,15 +134,15 @@ const Customers = () => {
             color: `${colors.greenAccent[200]} !important`,
           },
         }}
-      >{
-        <DataGrid
-          checkboxSelection
-          rows={customerTable}
-          columns={columns}
-          getRowId={(row) => row.userId}
-        />
-      }
-        
+      >
+        {
+          <DataGrid
+            checkboxSelection
+            rows={customerTable}
+            columns={columns}
+            getRowId={(row) => row.userId}
+          />
+        }
       </Box>
     </Box>
   );
