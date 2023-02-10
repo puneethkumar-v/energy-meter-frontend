@@ -118,15 +118,7 @@ const SensorMaster = () => {
   const handleFormSubmit = async (values, { resetForm }) => {
     try {
       setLoading(true);
-      // arrayOfUniqueSensors.map(async (sensor) => {
-      //   const { data } = await API.post("/sensorMaster/add", {
-      //     device_id: values.device_id,
-      //     sensor_idx: sensor.sensor_idx,
-      //     sensor_name: sensor.sensor_name,
-      //     sensor_uom: sensor.sensor_uom,
-      //     sensor_report_group: sensor.sensor_report_group,
-      //   });
-      // });
+      const existingSensors = [];
       selected.map(async (val) => {
         let actualValue = {
           device_id: values.device_id,
@@ -135,15 +127,25 @@ const SensorMaster = () => {
           sensor_uom: val.value.sensor_uom,
           sensor_report_group: val.value.sensor_report_group,
         };
-        const { data } = await API.post("/sensorMaster/add", actualValue);
-        console.log(data);
+        try {
+          const { data } = await API.post("/sensorMaster/add", actualValue);
+          console.log(data);
+        } catch (err) {
+          existingSensors.push(val.value.sensor_name);
+          console.log("existingSensors ");
+          console.log(existingSensors.join(", "));
+          setError(
+            `${existingSensors.join(", ")}: These sensors already exists`
+          );
+        }
       });
+
       resetForm({ values: initialValues });
       setSelected([]);
       setLoading(false);
     } catch (err) {
-      console.log(err);
-      setError(err.message);
+      console.log(err.response.data.error);
+      setError(err.response.data.error);
     }
   };
 
