@@ -51,6 +51,8 @@ export default function Report() {
 
   const getDate = (value) => {
     let date = `${new Date(value.$d).getDate()}`;
+    let hour = `${new Date(value.$d).getHours()}`;
+    console.log(hour);
     if (date < 10) {
       date = `0${date}`;
     }
@@ -65,12 +67,13 @@ export default function Report() {
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    // console.log("fromDate", fromDate && getDate(fromDate));
-    // console.log("toDate", toDate && getDate(toDate));
+    console.log("fromDate", fromDate.$d);
+    console.log("toDate", toDate);
     let obj = {
       fromDate: getDate(fromDate),
       toDate: getDate(toDate),
     };
+    console.log(obj);
     try {
       const { data } = await API.post("/report/between-dates", obj, {
         responseType: "blob", // had to add this one here
@@ -158,6 +161,7 @@ export default function Report() {
               sx={{
                 minWidth: 0,
                 width: "100%  !important",
+                margin: "2rem",
               }}
             >
               <DatePicker
@@ -166,8 +170,8 @@ export default function Report() {
                 sx={{
                   minWidth: 0,
                   width: "100%  !important",
+                  margin: "2rem",
                 }}
-                mb="2rem"
                 // minDate={dayjs("2012-03-01")}
                 maxDate={dayjs(new Date())}
                 onChange={(newValue) => {
