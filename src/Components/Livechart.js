@@ -39,7 +39,7 @@ function Livechart() {
       const { data } = await API.post("/sensorValue/get-unique-sensor-names", {
         deviceId: device_id,
       });
-      console.log(data);
+      // console.log(data);
       setSensorNames(data);
     } catch (err) {
       console.log(err);
@@ -199,8 +199,20 @@ function Livechart() {
   }
 
   async function fetchGraphValue() {
-    // get_x_axis(new Date(readingTime).toString());
-    get_x_axis(new Date().toISOString());
+    // var dateUTC = new Date(readingTime).getTime();
+    // var dateIST = new Date(dateUTC);
+    // dateIST.setHours(dateIST.getHours() + 5);
+    // dateIST.setMinutes(dateIST.getMinutes() + 30);
+
+    const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() + 5);
+    currentTime.setMinutes(currentTime.getMinutes() + 30);
+
+    get_x_axis(currentTime.toISOString());
+    // get_x_axis(new Date(readingTime).toLocaleTimeString());
+    // console.log(dateIST);
+    // console.log("date", new Date().toISOString());
+    console.log(readingTime);
     // get_y1_axis(Math.floor(Math.random() * 101).toFixed(2));
     // get_y2_axis(Math.floor(Math.random() * 101).toFixed(2));
 
