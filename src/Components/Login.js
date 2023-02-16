@@ -18,6 +18,7 @@ import axios from "axios";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ErrorIcon from "@mui/icons-material/Error";
+import { stateModifier } from "../features/slice";
 
 const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
@@ -47,10 +48,12 @@ const Login = () => {
       profile["refreshToken"] = data.refreshToken;
       // let obj = { profile, accessToken, refreshToken };
 
+      dispatch(stateModifier(true));
       localStorage.setItem("profile", JSON.stringify(profile));
 
       setIsActive(true);
-      window.location.href = "/devices";
+      // window.location.href = "/";
+      navigate("/devices");
       setLoading(false);
       // let profiles = JSON.parse(localStorage.getItem("profiles"));
       // if (profiles.email == values.email) {

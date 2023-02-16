@@ -19,17 +19,23 @@ import Tenants from "./Components/Tenants";
 import SensorMaster from "./Components/SensorMaster";
 import SensorsList from "./Components/SensorsList";
 import Report from "./Components/Report";
+import { useLocation } from "react-router-dom";
+import Protected from "./Components/Protected";
 // import Devices from "./Components/Devices";
 // import Graph from "./Components/Graph";
 
 function App() {
-  const user = JSON.parse(localStorage.getItem("profile"));
+  const [user, setUser] = useState(null);
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+  const location = useLocation();
 
-  // useEffect(() => {
-  //   setUser(JSON.parse(localStorage.getItem("profile")));
-  // }, [user]);
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("profile")));
+    console.log("user exist");
+  }, [location]);
+
+  console.log("User from outside useeffect", user);
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -43,9 +49,23 @@ function App() {
             <Routes>
               <Route path="/signup" element={<Signup />} />
               {user ? (
-                <Route path="/" element={<Home header />} />
+                <Route
+                  path="/"
+                  element={
+                    <Protected>
+                      <Home header />{" "}
+                    </Protected>
+                  }
+                />
               ) : (
-                <Route path="/" element={<Home />} />
+                <Route
+                  path="/"
+                  element={
+                    <Protected>
+                      <Home />
+                    </Protected>
+                  }
+                />
               )}
 
               <Route path="/devices" element={<Devices />} />

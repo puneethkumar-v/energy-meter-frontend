@@ -11,12 +11,20 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { stateModifier } from "../features/slice";
+import { useSelector } from "react-redux";
 
 const Topbar = ({ login }) => {
+  const auth = useSelector((state) => console.log(state));
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
   const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
   // axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
   API.interceptors.request.use((req) => {
@@ -39,7 +47,9 @@ const Topbar = ({ login }) => {
 
   function handleLogout() {
     localStorage.removeItem("profile");
-    window.location.href = "/login";
+    dispatch(stateModifier(false));
+    // window.location.href = "/login";
+    navigate("/");
   }
 
   return (
