@@ -338,37 +338,46 @@ export default function Report() {
                 <CircularProgress />
               ) : (
                 <>
-                  <Button
-                    onClick={handleCsvSubmit}
-                    type="submit"
-                    color="secondary"
-                    display="block"
-                    variant="contained"
-                    sx={{
-                      padding: isNonMobile ? "10px 20px" : null,
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
                       width: "100%",
-                      fontSize: isNonMobile ? "16px" : null,
-                      letterSpacing: "0.15rem",
-                      fontWeight: "bold",
                     }}
                   >
-                    GENERATE CSV
-                  </Button>
-                  <Button
-                    onClick={handlePdfSubmit}
-                    type="submit"
-                    color="secondary"
-                    variant="contained"
-                    sx={{
-                      padding: isNonMobile ? "10px 20px" : null,
-                      width: "100%",
-                      fontSize: isNonMobile ? "16px" : null,
-                      letterSpacing: "0.15rem",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    GENERATE PDF
-                  </Button>
+                    <Button
+                      onClick={handleCsvSubmit}
+                      type="submit"
+                      color="secondary"
+                      display="block"
+                      variant="contained"
+                      sx={{
+                        marginBottom: "1rem",
+                        padding: isNonMobile ? "10px 20px" : null,
+                        width: "100%",
+                        fontSize: isNonMobile ? "16px" : null,
+                        letterSpacing: "0.15rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      GENERATE CSV
+                    </Button>
+                    <Button
+                      onClick={handlePdfSubmit}
+                      type="submit"
+                      color="secondary"
+                      variant="contained"
+                      sx={{
+                        padding: isNonMobile ? "10px 20px" : null,
+                        width: "100%",
+                        fontSize: isNonMobile ? "16px" : null,
+                        letterSpacing: "0.15rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      GENERATE PDF
+                    </Button>
+                  </div>
                 </>
               )}
             </Box>
