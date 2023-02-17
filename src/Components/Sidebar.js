@@ -185,7 +185,7 @@ const Sidebar = () => {
             {role === "ADMIN" && (
               <>
                 <Item
-                  title="My Devices"
+                  title="Devices"
                   to="/devices"
                   icon={<ChargingStationIcon />}
                   selected={selected}
