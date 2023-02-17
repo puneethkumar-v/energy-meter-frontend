@@ -192,8 +192,8 @@ const Sidebar = () => {
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Add Customer"
-                  to="add-customer"
+                  title="Add Tenant"
+                  to="add-tenant"
                   icon={<PersonAddAltIcon />}
                   selected={selected}
                   setSelected={setSelected}
