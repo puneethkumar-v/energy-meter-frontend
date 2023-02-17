@@ -185,6 +185,13 @@ const Sidebar = () => {
             {role === "ADMIN" && (
               <>
                 <Item
+                  title="My Devices"
+                  to="/devices"
+                  icon={<ChargingStationIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
                   title="Add Customer"
                   to="add-customer"
                   icon={<PersonAddAltIcon />}
