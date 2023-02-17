@@ -124,7 +124,7 @@ export default function Report() {
     return `${year}-${month}-${date}`;
   };
 
-  const handleSubmit = async (e) => {
+  const handlePdfSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     console.log("fromDate", fromDate.$d);
@@ -136,11 +136,52 @@ export default function Report() {
     };
     console.log(obj);
     try {
-      const { data } = await API.post("/report/between-dates", obj, {
-        responseType: "blob", // had to add this one here
+      const res1 = await API.post(
+        "/report/between-dates-specific-device",
+        obj,
+        {
+          responseType: "blob", // had to add this one here
+        }
+      );
+      // const res2 = await API.post("/csv/between-dates-specific-device", obj, {
+      //   responseType: "blob",
+      // });
+      console.log(res1.data);
+      // window.open(URL.createObjectURL(res2.data));
+
+      window.open(URL.createObjectURL(res1.data));
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleCsvSubmit = async (e) => {
+    setLoading(true);
+    e.preventDefault();
+    console.log("fromDate", fromDate.$d);
+    console.log("toDate", toDate);
+    let obj = {
+      fromDate: getDate(fromDate),
+      toDate: getDate(toDate),
+      deviceId: dropDown,
+    };
+    console.log(obj);
+    try {
+      // const res1 = await API.post(
+      //   "/report/between-dates-specific-device",
+      //   obj,
+      //   {
+      //     responseType: "blob", // had to add this one here
+      //   }
+      // );
+      const res2 = await API.post("/csv/between-dates-specific-device", obj, {
+        responseType: "blob",
       });
-      console.log(data);
-      window.open(URL.createObjectURL(data));
+      // console.log(res1.data);
+      window.open(URL.createObjectURL(res2.data));
+
+      // window.open(URL.createObjectURL(res1.data));
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -163,7 +204,6 @@ export default function Report() {
         }}
       >
         <form
-          onSubmit={handleSubmit}
           style={{
             width: "100%",
             // boxShadow: "7px 7px 9px 0px rgba(0,0,0,0.47)",
@@ -297,20 +337,39 @@ export default function Report() {
               {loading ? (
                 <CircularProgress />
               ) : (
-                <Button
-                  type="submit"
-                  color="secondary"
-                  variant="contained"
-                  sx={{
-                    padding: isNonMobile ? "10px 20px" : null,
-                    width: "100%",
-                    fontSize: isNonMobile ? "16px" : null,
-                    letterSpacing: "0.15rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  GENERATE
-                </Button>
+                <>
+                  <Button
+                    onClick={handleCsvSubmit}
+                    type="submit"
+                    color="secondary"
+                    display="block"
+                    variant="contained"
+                    sx={{
+                      padding: isNonMobile ? "10px 20px" : null,
+                      width: "100%",
+                      fontSize: isNonMobile ? "16px" : null,
+                      letterSpacing: "0.15rem",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    GENERATE CSV
+                  </Button>
+                  <Button
+                    onClick={handlePdfSubmit}
+                    type="submit"
+                    color="secondary"
+                    variant="contained"
+                    sx={{
+                      padding: isNonMobile ? "10px 20px" : null,
+                      width: "100%",
+                      fontSize: isNonMobile ? "16px" : null,
+                      letterSpacing: "0.15rem",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    GENERATE PDF
+                  </Button>
+                </>
               )}
             </Box>
           </Box>
