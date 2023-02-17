@@ -9,17 +9,18 @@ import Header from "./Header";
 import {
   Button,
   CircularProgress,
+  InputLabel,
+  MenuItem,
+  Select,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ErrorIcon from "@mui/icons-material/Error";
 import { tokens } from "../theme";
 import dayjs from "dayjs";
 import axios from "axios";
-
-const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
 export default function Report() {
   const theme = useTheme();
@@ -27,13 +28,19 @@ export default function Report() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [dropDown, setDropDown] = useState("");
   // const user = JSON.parse(localStorage.getItem("profile"));
-  const [admin, setIsAdmin] = useState(false);
   const colors = tokens(theme.palette.mode);
 
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
 
+  const [devices, setDevices] = useState([]);
+  const [role, setRole] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const API = axios.create({ baseURL: process.env.REACT_APP_API });
+  const [count, setCount] = useState(0);
   API.interceptors.request.use((req) => {
     if (localStorage.getItem("profile")) {
       req.headers.authorization = `Bearer ${
@@ -48,6 +55,59 @@ export default function Report() {
   })
     .then(({ data }) => setIsAdmin(data.isAdmin))
     .catch((err) => console.log(err));
+
+  const getRole = async () => {
+    const { data } = await API.get("/auth/my-role");
+    setRole(data.role);
+  };
+
+  const getMyDevices = async () => {
+    try {
+      setLoading(true);
+      const { data } = await API.get("/device/get-my-devices");
+      setDevices(data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getAssignedDevices = async () => {
+    try {
+      setLoading(true);
+      const { data } = await API.get("/tenant/get-assigned-devices");
+      setDevices(data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getAllDevices = async () => {
+    try {
+      setLoading(true);
+      const { data } = await API.get("/device/get-all-devices");
+      // console.log(data);
+      setDevices(data);
+
+      // console.log(data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getRole();
+  }, []);
+
+  useEffect(() => {
+    // isAdmin ? getAllDevices() : getMyDevices();
+
+    if (role === "CUSTOMER") getAssignedDevices();
+    if (role === "ADMIN") getAllDevices();
+    if (role === "TENANT") getMyDevices();
+  }, [role]);
 
   const getDate = (value) => {
     let date = `${new Date(value.$d).getDate()}`;
@@ -72,6 +132,7 @@ export default function Report() {
     let obj = {
       fromDate: getDate(fromDate),
       toDate: getDate(toDate),
+      deviceId: dropDown,
     };
     console.log(obj);
     try {
@@ -80,7 +141,6 @@ export default function Report() {
       });
       console.log(data);
       window.open(URL.createObjectURL(data));
-      // console.log(res);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -156,44 +216,78 @@ export default function Report() {
               "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
             }}
           >
-            <LocalizationProvider
-              dateAdapter={AdapterDayjs}
-              sx={{
-                minWidth: 0,
-                width: "100%  !important",
-                margin: "2rem",
+            <div
+              style={{
+                // gridColumn: "span 4",
+                width: "100%",
+                marginBottom: "1rem",
               }}
             >
-              <DatePicker
-                label="From Date"
-                value={fromDate}
+              <InputLabel id="device_id">Device ID</InputLabel>
+              <Select
+                fullWidth
+                variant="filled"
+                label="Device xID"
+                onChange={(e) => setDropDown(e.target.value)}
+                value={dropDown}
+                name="device_id"
+                labelId="device"
+                id="device_id"
+                // sx={{ gridColumn: "span 4" }}
+              >
+                {devices.map((dev, id) => (
+                  <MenuItem value={dev.device_id} key={id}>
+                    {dev.device_id}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "1rem",
+              }}
+            >
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
                 sx={{
                   minWidth: 0,
                   width: "100%  !important",
                   margin: "2rem",
                 }}
-                // minDate={dayjs("2012-03-01")}
-                maxDate={dayjs(new Date())}
-                onChange={(newValue) => {
-                  setFromDate(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              <br />
-              <DatePicker
-                label="To Date"
-                sx={{
-                  minWidth: 0,
-                  width: "100%  !important",
-                }}
-                value={toDate}
-                maxDate={dayjs(new Date())}
-                onChange={(newValue) => {
-                  setToDate(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
+              >
+                <DatePicker
+                  label="From Date"
+                  value={fromDate}
+                  sx={{
+                    minWidth: 0,
+                    width: "100%  !important",
+                    margin: "2rem",
+                  }}
+                  // minDate={dayjs("2012-03-01")}
+                  maxDate={dayjs(new Date())}
+                  onChange={(newValue) => {
+                    setFromDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+                <br />
+                <DatePicker
+                  label="To Date"
+                  sx={{
+                    minWidth: 0,
+                    width: "100%  !important",
+                  }}
+                  value={toDate}
+                  maxDate={dayjs(new Date())}
+                  onChange={(newValue) => {
+                    setToDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </div>
             <Box
               display="flex"
               justifyContent="center"

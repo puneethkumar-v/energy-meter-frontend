@@ -48,8 +48,8 @@ const Topbar = ({ login }) => {
   function handleLogout() {
     localStorage.removeItem("profile");
     dispatch(stateModifier(false));
-    // window.location.href = "/login";
-    navigate("/");
+    window.location.href = "/login";
+    // navigate("/");
   }
 
   return (

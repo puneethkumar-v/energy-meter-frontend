@@ -163,14 +163,25 @@ const Sidebar = () => {
             >
               Data
             </Typography>
-            <Item
-              title={isAdmin ? "Devices" : "My Devices"}
-              to="/devices"
-              icon={<ChargingStationIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
 
+            {role === "CUSTOMER" && (
+              <>
+                <Item
+                  title="My Devices"
+                  to="/devices"
+                  icon={<ChargingStationIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Generate Report"
+                  to="report"
+                  icon={<EdgesensorHighIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </>
+            )}
             {role === "ADMIN" && (
               <>
                 <Item
@@ -187,20 +198,23 @@ const Sidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
+
                 <Item
-                  title="Customers List"
+                  title="Tenants List"
                   to="customers"
                   icon={<PeopleIcon />}
                   selected={selected}
                   setSelected={setSelected}
                 />
+
                 <Item
-                  title="Tenants List"
+                  title="Customers List"
                   to="tenants"
                   icon={<PeopleIcon />}
                   selected={selected}
                   setSelected={setSelected}
                 />
+
                 <Item
                   title="Sensor Master"
                   to="sensor-master"
@@ -224,11 +238,18 @@ const Sidebar = () => {
                 />
               </>
             )}
-            {role === "CUSTOMER" && (
+            {role === "TENANT" && (
               <>
                 <Item
-                  title="Add Tenant"
-                  to="add-tenant"
+                  title="My Devices"
+                  to="/devices"
+                  icon={<ChargingStationIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Add Customer"
+                  to="add-customer"
                   icon={<PersonAddAltIcon />}
                   selected={selected}
                   setSelected={setSelected}
@@ -241,9 +262,16 @@ const Sidebar = () => {
                   setSelected={setSelected}
                 />
                 <Item
-                  title="My Tenants"
-                  to="tenants"
+                  title="My Customers"
+                  to="customers"
                   icon={<PeopleIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Generate Report"
+                  to="report"
+                  icon={<EdgesensorHighIcon />}
                   selected={selected}
                   setSelected={setSelected}
                 />

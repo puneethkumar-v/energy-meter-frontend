@@ -16,6 +16,7 @@ const Devices = () => {
   const [arr, setArr] = useState([]);
   const [customerTable, setCustomerTable] = useState([]);
   const [assignedDevices, setAssignedDevices] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [role, setRole] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -43,8 +44,10 @@ const Devices = () => {
 
   const getMyDevices = async () => {
     try {
+      setLoading(true);
       const { data } = await API.get("/device/get-my-devices");
       setCustomerTable(data);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -52,8 +55,10 @@ const Devices = () => {
 
   const getAssignedDevices = async () => {
     try {
+      setLoading(true);
       const { data } = await API.get("/tenant/get-assigned-devices");
       setAssignedDevices(data);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -61,11 +66,13 @@ const Devices = () => {
 
   const getAllDevices = async () => {
     try {
+      setLoading(true);
       const { data } = await API.get("/device/get-all-devices");
       // console.log(data);
       setArr(data);
 
       // console.log(data);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -78,9 +85,9 @@ const Devices = () => {
   useEffect(() => {
     // isAdmin ? getAllDevices() : getMyDevices();
 
-    if (role === "TENANT") getAssignedDevices();
+    if (role === "CUSTOMER") getAssignedDevices();
     if (role === "ADMIN") getAllDevices();
-    if (role === "CUSTOMER") getMyDevices();
+    if (role === "TENANT") getMyDevices();
   }, [role]);
 
   const columns = [
@@ -126,12 +133,12 @@ const Devices = () => {
           )[0];
         }
 
-        if (role === "CUSTOMER") {
+        if (role === "TENANT") {
           currentDevice = customerTable.filter(
             (device) => device.device_id === deviceId
           )[0];
         }
-        if (role === "TENANT") {
+        if (role === "CUSTOMER") {
           currentDevice = assignedDevices.filter(
             (device) => device.device_id === deviceId
           )[0];
@@ -225,7 +232,7 @@ const Devices = () => {
             getRowId={(row) => row.device_id}
           />
         )}
-        {role === "CUSTOMER" && (
+        {role === "TENANT" && (
           <DataGrid
             checkboxSelection
             rows={customerTable}
@@ -233,7 +240,7 @@ const Devices = () => {
             getRowId={(row) => row.device_id}
           />
         )}
-        {role === "TENANT" && (
+        {role === "CUSTOMER" && (
           <DataGrid
             checkboxSelection
             rows={assignedDevices}

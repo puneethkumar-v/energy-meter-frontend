@@ -69,8 +69,8 @@ function App() {
               )}
 
               <Route path="/devices" element={<Devices />} />
-              <Route path="/customers" element={<Customers />} />
-              <Route path="/tenants" element={<Tenants />} />
+              <Route path="/customers" element={<Tenants />} />
+              <Route path="/tenants" element={<Customers />} />
               <Route path="/add-customer" element={<CustomerForm />} />
               <Route path="/devices/:device_id" element={<Livechart />} />
               <Route path="/login" element={<Login />} />
