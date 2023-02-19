@@ -56,9 +56,9 @@ const AssignDeviceForm = () => {
 
   const getTenants = async () => {
     const result = await API.get("/profile/me");
-    console.log("data" , result.data.userId);
+    console.log("data", result.data.userId);
     const { data } = await API.post("/tenant/get-by-customer-id", {
-      "customerId": result.data.userId,
+      customerId: result.data.userId,
     });
     console.log(data);
     setTenants(data);
@@ -88,7 +88,7 @@ const AssignDeviceForm = () => {
 
   const handleFormSubmit = async (values, { resetForm }) => {
     try {
-      const {data} = await assignDeviceToTenant(values);
+      const { data } = await assignDeviceToTenant(values);
       resetForm({ values: initialValues });
     } catch (err) {
       console.log(err);
@@ -185,7 +185,7 @@ const AssignDeviceForm = () => {
                     width: "100%",
                   }}
                 >
-                  <InputLabel id="tenantId">Tenants</InputLabel>
+                  <InputLabel id="tenantId">Customers</InputLabel>
                   <Select
                     fullWidth
                     variant="filled"

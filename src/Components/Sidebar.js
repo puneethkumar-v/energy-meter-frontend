@@ -208,7 +208,7 @@ const Sidebar = () => {
 
                 <Item
                   title="Tenants List"
-                  to="customers"
+                  to="tenants"
                   icon={<PeopleIcon />}
                   selected={selected}
                   setSelected={setSelected}
@@ -216,7 +216,7 @@ const Sidebar = () => {
 
                 <Item
                   title="Customers List"
-                  to="tenants"
+                  to="customers"
                   icon={<PeopleIcon />}
                   selected={selected}
                   setSelected={setSelected}
