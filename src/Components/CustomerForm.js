@@ -49,7 +49,7 @@ const CustomerForm = () => {
     try {
       setLoading(true);
       console.log("values", values);
-      const { data } = await API.post("auth/register-tenant", values);
+      const { data } = await API.post("auth/register-customer", values);
       // console.log(adminRegister);
       console.log("data", data);
       setFormData(data);

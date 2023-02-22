@@ -50,7 +50,7 @@ const TenantForm = () => {
     try {
       setLoading(true);
       console.log(values);
-      const { data } = await API.post("/auth/register-customer", values);
+      const { data } = await API.post("/auth/register-tenant", values);
       // console.log(adminRegister);
       console.log(data);
       setFormData(data);
