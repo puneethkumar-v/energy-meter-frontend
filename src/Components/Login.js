@@ -67,7 +67,7 @@ const Login = () => {
       // console.log(profile);
     } catch (err) {
       console.log(err);
-      setError(err.message);
+      setError(err.response.data.error);
       setLoading(false);
     }
   };

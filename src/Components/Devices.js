@@ -122,6 +122,7 @@ const Devices = () => {
       headerName: "Details",
       flex: 1,
       renderCell: ({ row: { access }, id }) => {
+        console.log("id", id);
         // renderCell: (index) => {
         // const currentIndex = api.getRowIndex(id);
         const deviceId = id;
@@ -144,38 +145,10 @@ const Devices = () => {
           )[0];
         }
 
-        // console.log(currentDevice);
-        // console.log({ currentDevice });
-        // const currentIndex = index.api.getRowIndex(index.row.id);
-
-        // console.log(currentIndex + 1);
-        // return <h1>hi</h1>;
+        //
 
         return (
-          // <Box
-          //   width="40%"
-          //   cursor="pointer"
-          //   // height="70px"
-          //   // m=" auto"
-          //   p="5px"
-          //   display="flex"
-          //   justifyContent="center"
-          //   backgroundColor={
-          //     access === "admin"
-          //       ? colors.greenAccent[600]
-          //       : access === "manager"
-          //       ? colors.greenAccent[700]
-          //       : colors.greenAccent[700]
-          //   }
-          //   borderRadius="4px">
-          //   {/* {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-          //   {access === "manager" && <SecurityOutlinedIcon />}
-          //   {access === "user" && <LockOpenOutlinedIcon />} */}
-          //   {/* <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-          //     Open
-          //   </Typography> */}
-          //   <Button variant="contained">Open</Button>
-          // </Box>
+          //
           <>
             {/* {console.log("currentDevice", currentDevice)} */}
             <Link
