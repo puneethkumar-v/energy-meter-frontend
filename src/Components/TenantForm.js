@@ -288,7 +288,7 @@ const TenantForm = () => {
                   fullWidth
                   variant="filled"
                   type="tel"
-                  label="contact_number"
+                  label="Contact Number"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.contact_number}

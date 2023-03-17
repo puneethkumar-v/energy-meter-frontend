@@ -174,7 +174,7 @@ const DeviceForm = () => {
                     width: "100%",
                   }}
                 >
-                  <InputLabel id="user_id">User</InputLabel>
+                  <InputLabel id="user_id">Tenant</InputLabel>
                   <Select
                     fullWidth
                     variant="filled"
