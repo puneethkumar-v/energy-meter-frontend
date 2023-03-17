@@ -62,6 +62,7 @@ const CustomerForm = () => {
         }
       );
       setLoading(false);
+      alert("Successfully added a Customer");
       if (emailConfirmation.status == 200) {
         console.log("Done");
       }

@@ -66,6 +66,7 @@ const DeviceForm = () => {
       resetForm({ values: initialValues });
       console.log(data);
       setLoading(false);
+      alert("SuccessFully added a device");
     } catch (err) {
       console.log(err);
       setError(err.message);

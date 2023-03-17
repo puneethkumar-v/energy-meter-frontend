@@ -63,6 +63,7 @@ const TenantForm = () => {
         }
       );
       setLoading(false);
+      alert("SuccessFully added a Tenant");
       if (emailConfirmation.status == 200) {
         console.log("Done");
       }
