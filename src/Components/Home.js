@@ -12,7 +12,10 @@ const Home = ({ header }) => {
     <Box m="20px">
       {header ? (
         <>
-          <Header title="REPORTS" subtitle="Know your weekly, montly reports" />
+          <Header
+            title="DASHBOARD"
+            subtitle="Know your weekly, montly statistics"
+          />
           <Value />
         </>
       ) : (

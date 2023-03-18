@@ -23,6 +23,7 @@ import QueuePlayNextIcon from "@mui/icons-material/QueuePlayNext";
 import axios from "axios";
 import PeopleIcon from "@mui/icons-material/People";
 import EdgesensorHighIcon from "@mui/icons-material/EdgesensorHigh";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -48,7 +49,7 @@ const Sidebar = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [role, setRole] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Devices");
+  const [selected, setSelected] = useState(isAdmin ? "Devices" : "Dashboard");
   const user = JSON.parse(localStorage.getItem("profile"));
 
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
@@ -184,6 +185,13 @@ const Sidebar = () => {
             )}
             {role === "ADMIN" && (
               <>
+                <Item
+                  title="Dashboard"
+                  to="/"
+                  icon={<DashboardIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
                 <Item
                   title="Devices"
                   to="/devices"

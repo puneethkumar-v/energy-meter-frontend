@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
 
 html,
@@ -32,4 +36,49 @@ body,
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.dashCards {
+  font-size: 16px;
+  font-family: "Roboto", Arial, sans-serif;
+  /* background: #f0f0f0; */
+  padding: 1em;
+  display: flex;
+  flex-direction: row;
+  flex-flow: row wrap;
+}
+
+.dashCard {
+  /* background: #fff; */
+  min-width: 16em;
+  max-width: 16em;
+  border-radius: 0.5em;
+  padding: 1em;
+  box-shadow: 0 0.12em 0.12em #ccc;
+  margin: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  /* color: #333; */
+  padding: 0 0 0.5em 0;
+  margin: 0 0 1em 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.body {
+  display: flex;
+  font-size: 4em;
+}
+
+.icon {
+  /* color: #a5a0a0; */
+  font-size: 5rem;
+}
+
+.value {
+  font-weight: 100;
+  margin-left: auto;
+  /* color: #666; */
 }

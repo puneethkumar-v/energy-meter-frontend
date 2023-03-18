@@ -50,10 +50,10 @@ const Login = () => {
 
       dispatch(stateModifier(true));
       localStorage.setItem("profile", JSON.stringify(profile));
+      const res = await API.get("/auth/my-role", { headers: {} });
 
       setIsActive(true);
-      // window.location.href = "/";
-      navigate("/devices");
+      res.data.role === "ADMIN" ? navigate("/") : navigate("/devices");
       setLoading(false);
       // let profiles = JSON.parse(localStorage.getItem("profiles"));
       // if (profiles.email == values.email) {

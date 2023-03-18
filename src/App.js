@@ -21,6 +21,9 @@ import SensorsList from "./Components/SensorsList";
 import Report from "./Components/Report";
 import { useLocation } from "react-router-dom";
 import Protected from "./Components/Protected";
+import "@tremor/react/dist/esm/tremor.css";
+
+import "../src/index.css";
 // import Devices from "./Components/Devices";
 // import Graph from "./Components/Graph";
 

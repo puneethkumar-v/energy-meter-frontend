@@ -1,179 +1,115 @@
-import { Box, useTheme } from "@mui/system";
-import React from "react";
-import Header from "./Header";
-import useFetch from "./useFetch";
+import { Card, ColGrid, Flex, Metric, Text } from "@tremor/react";
+import ElectricMeterIcon from "@mui/icons-material/ElectricMeter";
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import { Icon } from "@mui/material";
+import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { useEffect, useState } from "react";
-import ReactApexChart from "react-apexcharts";
-import { Typography } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
-const Value = () => {
-	// const [theme, colorMode] = useMode();
+import "../../src/index.css";
 
-	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
-	const [values, setValues] = useState([]);
-	const [freq, setFreq] = useState([]);
-	const [x_axis, setx_axis] = useState([new Date().toISOString()]);
-	const [y_axis, sety_axis] = useState(null);
-	let arr = [];
-	const API = axios.create({ baseURL: process.env.REACT_APP_API });
-	API.post("/sensorValue/getData", {
-		deviceId: "MQI1-90-38-0C-57-58-BC",
-	})
-		.then(({ data }) => {
-			sety_axis(data.actualData["Frequency"]);
-			console.log(y_axis);
-			arr = y_axis.map((val) => val.value);
-			// console.log(arr);
-		})
-		.catch((err) => console.log(err));
+const categories = [
+  {
+    title: "Devices",
+    metric: "1",
+    color: "indigo",
+    icon: <ElectricMeterIcon />,
+  },
+  {
+    title: "Customers",
+    metric: "3",
+    color: "fuchsia",
+    icon: <SupportAgentIcon />,
+  },
+  {
+    title: "Tenants",
+    metric: "6",
+    color: "amber",
+    icon: <SupervisedUserCircleIcon />,
+  },
+];
 
-	// console.log(freq[values.uniqueSensorNames[0]]);
-	// console.log(freq);
+export default function Value() {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const [deviceCount, setDeviceCount] = useState("");
+  const [tenantCount, setTenantCount] = useState("");
+  const [customerCount, setCustomerCount] = useState("");
 
-	function get_y1_axis(y_val) {
-		console.log(arr);
-		if (y_axis.length < 6) {
-			sety_axis([...y_axis, y_val]);
-		} else {
-			sety_axis([...y_axis.slice(1), y_val]);
-		}
-	}
+  const API = axios.create({ baseURL: process.env.REACT_APP_API });
 
-	function get_x_axis(x_val) {
-		if (x_axis.length < 6) {
-			setx_axis([...x_axis, x_val]);
-		} else {
-			setx_axis([...x_axis.slice(1), x_val]);
-		}
-	}
-	const [Volt_R, setVolt_R] = useState({
-		series: [
-			{
-				name: "Temperature",
-				data: y_axis,
-			},
-		],
-		options: {
-			chart: {
-				height: 350,
-				type: "area",
-			},
+  API.interceptors.request.use((req) => {
+    if (localStorage.getItem("profile")) {
+      req.headers.authorization = `Bearer ${
+        JSON.parse(localStorage.getItem("profile")).accessToken
+      }`;
+    }
 
-			markers: {
-				size: 5,
-				hover: {
-					size: undefined,
-					sizeOffset: 3,
-				},
-			},
-			dataLabels: {
-				enabled: false,
-			},
-			stroke: {
-				curve: "smooth",
-			},
-			xaxis: {
-				type: "datetime",
-				categories: x_axis,
-			},
-			tooltip: {
-				x: {
-					format: "HH:mm:ss",
-				},
-			},
-		},
-	});
+    return req;
+  });
 
-	function getData1() {
-		return {
-			series: [
-				{
-					name: "Frequency",
-					data: y_axis,
-				},
-			],
-			options: {
-				// colors: colors.greenAccent[200],
-				chart: {
-					height: 350,
-					type: "area",
+  const fetchAllData = async () => {
+    try {
+      const tenantDetails = await API.get("/tenant/get-all");
+      setTenantCount(tenantDetails.data.length);
+      console.log("tenant", tenantDetails.data.length);
 
-					animations: {
-						enabled: false,
-						// easing: "easeinout",
-						// speed: 800,
-						// dynamicAnimation: {
-						//   enabled: false,
-						//   speed: 350,
-						// },
-					},
-				},
-				markers: {
-					size: 5,
-					hover: {
-						size: undefined,
-						sizeOffset: 3,
-					},
-				},
-				dataLabels: {
-					enabled: false,
-				},
-				stroke: {
-					curve: "smooth",
-				},
-				xaxis: {
-					type: "datetime",
-					categories: x_axis,
-				},
-				tooltip: {
-					x: {
-						format: "dd MMM yyyy HH:mm:ss",
-					},
-				},
-			},
-		};
-	}
+      const customerDetails = await API.get("/customer/get-all");
+      setCustomerCount(customerDetails.data.length);
+      console.log("customer", customerDetails.data.length);
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			get_x_axis(new Date().toISOString());
-			let val = freq.map((val) => val.value);
-			// console.log(val);
-			get_y1_axis(val.pop());
-			setVolt_R((x) => getData1());
-		}, 1000);
-		return () => clearInterval(interval);
-	}, [x_axis]);
+      const deviceDetails = await API.get("/device/get-all-devices");
+      console.log("device", deviceDetails.data.length);
+      setDeviceCount(deviceDetails.data.length);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-	// console.log(y_axis);
-	return (
-		<div>
-			<div style={{ gridColumn: "span 2" }}>
-				<Typography
-					variant="h5"
-					m="0.5rem"
-					style={{ textAlign: "left" }}
-				>
-					Values
-				</Typography>
-				<ReactApexChart
-					options={Volt_R.options}
-					series={Volt_R.series}
-					height={350}
-					// type={graphType ? graphType : "area"}
-					width={500}
-					// color={colors.grey[100]}
-				/>
-			</div>
-		</div>
-	);
-};
+  useEffect(() => {
+    fetchAllData();
+  }, []);
 
-export default Value;
+  return (
+    <div className="dashCards">
+      <div
+        className="dashCard"
+        style={{ backgroundColor: colors.primary[400] }}
+      >
+        <div className="title">Devices</div>
+        <div className="body">
+          <div className="icon">
+            <ElectricMeterIcon fontSize="large" />
+          </div>
+          <div className="value">{deviceCount}</div>
+        </div>
+      </div>
+      <div
+        className="dashCard"
+        style={{ backgroundColor: colors.primary[400] }}
+      >
+        <div className="title">Customers</div>
+        <div className="body">
+          <div className="icon">
+            <SupportAgentIcon fontSize="large" />
+          </div>
+          <div className="value">{customerCount}</div>
+        </div>
+      </div>
+      <div
+        className="dashCard"
+        style={{ backgroundColor: colors.primary[400] }}
+      >
+        <div className="title">Tenants</div>
+        <div className="body">
+          <div className="icon">
+            <SupervisedUserCircleIcon fontSize="large" />
+          </div>
+          <div className="value">{tenantCount}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
