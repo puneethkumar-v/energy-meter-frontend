@@ -21,13 +21,13 @@ const categories = [
     title: "Customers",
     metric: "3",
     color: "fuchsia",
-    icon: <SupportAgentIcon />,
+    icon: <SupervisedUserCircleIcon />,
   },
   {
     title: "Tenants",
     metric: "6",
     color: "amber",
-    icon: <SupervisedUserCircleIcon />,
+    icon: <SupportAgentIcon />,
   },
 ];
 
@@ -52,10 +52,10 @@ export default function Value() {
 
   const fetchAllData = async () => {
     try {
-      const tenantDetails = await API.get("/tenant/get-all");
+      const tenantDetails = await API.get("/customer/get-all");
       setTenantCount(tenantDetails.data.length);
 
-      const customerDetails = await API.get("/customer/get-all");
+      const customerDetails = await API.get("/tenant/get-all");
       setCustomerCount(customerDetails.data.length);
 
       const deviceDetails = await API.get("/device/get-all-devices");
@@ -83,18 +83,7 @@ export default function Value() {
           <div className="value">{deviceCount}</div>
         </div>
       </div>
-      <div
-        className="dashCard"
-        style={{ backgroundColor: colors.primary[400] }}
-      >
-        <div className="title">Customers</div>
-        <div className="body">
-          <div className="icon">
-            <SupportAgentIcon fontSize="large" />
-          </div>
-          <div className="value">{customerCount}</div>
-        </div>
-      </div>
+
       <div
         className="dashCard"
         style={{ backgroundColor: colors.primary[400] }}
@@ -105,6 +94,18 @@ export default function Value() {
             <SupervisedUserCircleIcon fontSize="large" />
           </div>
           <div className="value">{tenantCount}</div>
+        </div>
+      </div>
+      <div
+        className="dashCard"
+        style={{ backgroundColor: colors.primary[400] }}
+      >
+        <div className="title">Customers</div>
+        <div className="body">
+          <div className="icon">
+            <SupportAgentIcon fontSize="large" />
+          </div>
+          <div className="value">{customerCount}</div>
         </div>
       </div>
     </div>
