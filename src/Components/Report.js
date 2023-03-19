@@ -305,7 +305,7 @@ export default function Report() {
                     width: "100%  !important",
                     margin: "2rem",
                   }}
-                  // minDate={dayjs("2012-03-01")}
+                  minDate={dayjs("2022-03-01")}
                   maxDate={dayjs(new Date())}
                   onChange={(newValue) => {
                     setFromDate(newValue);
@@ -320,6 +320,7 @@ export default function Report() {
                     width: "100%  !important",
                   }}
                   value={toDate}
+                  minDate={fromDate}
                   maxDate={dayjs(new Date())}
                   onChange={(newValue) => {
                     setToDate(newValue);
