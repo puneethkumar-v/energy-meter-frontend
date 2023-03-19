@@ -68,10 +68,8 @@ const Devices = () => {
     try {
       setLoading(true);
       const { data } = await API.get("/device/get-all-devices");
-      // console.log(data);
       setArr(data);
 
-      // console.log(data);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -122,9 +120,6 @@ const Devices = () => {
       headerName: "Details",
       flex: 1,
       renderCell: ({ row: { access }, id }) => {
-        console.log("id", id);
-        // renderCell: (index) => {
-        // const currentIndex = api.getRowIndex(id);
         const deviceId = id;
         let currentDevice = {};
 

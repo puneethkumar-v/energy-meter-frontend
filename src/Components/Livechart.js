@@ -39,7 +39,6 @@ function Livechart() {
       const { data } = await API.post("/sensorValue/get-unique-sensor-names", {
         deviceId: device_id,
       });
-      // console.log(data);
       setSensorNames(data);
     } catch (err) {
       console.log(err);
@@ -62,7 +61,6 @@ function Livechart() {
 
   function handleChange(e) {
     setSensorType(() => e.target.value);
-    // console.log(e.target.value);
     sety1_axis([]);
   }
 
@@ -209,12 +207,6 @@ function Livechart() {
     currentTime.setMinutes(currentTime.getMinutes() + 30);
 
     get_x_axis(currentTime.toISOString());
-    // get_x_axis(new Date(readingTime).toLocaleTimeString());
-    // console.log(dateIST);
-    // console.log("date", new Date().toISOString());
-    console.log(readingTime);
-    // get_y1_axis(Math.floor(Math.random() * 101).toFixed(2));
-    // get_y2_axis(Math.floor(Math.random() * 101).toFixed(2));
 
     const graphValue = await fetch_freq();
 
@@ -223,7 +215,6 @@ function Livechart() {
   }
 
   useEffect(() => {
-    // fetchGraphValue();
     const interval = setInterval(fetchGraphValue, 1000);
     return () => clearInterval(interval);
   }, [Volt_R, sensorType]);

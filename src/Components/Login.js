@@ -35,18 +35,14 @@ const Login = () => {
     try {
       setLoading(true);
       const { data } = await API.post("/auth/login", values);
-      // console.log(data);
       API.interceptors.request.use((req) => {
         req.headers.authorization = `Bearer ${data.accessToken}`;
-        // console.log(req);
         return req;
       });
       let profileData = await API.get("/profile/me", { headers: {} });
-      // console.log(profileData.data, data.accessToken);
       let profile = profileData.data;
       profile["accessToken"] = data.accessToken;
       profile["refreshToken"] = data.refreshToken;
-      // let obj = { profile, accessToken, refreshToken };
 
       dispatch(stateModifier(true));
       localStorage.setItem("profile", JSON.stringify(profile));
@@ -55,18 +51,7 @@ const Login = () => {
       setIsActive(true);
       res.data.role === "ADMIN" ? navigate("/") : navigate("/devices");
       setLoading(false);
-      // let profiles = JSON.parse(localStorage.getItem("profiles"));
-      // if (profiles.email == values.email) {
-      //   profiles.accessToken = data.accessToken;
-      //   profiles.refreshToken = data.refreshToken;
-      //   // let profile = {...profiles, profiles.accessToken: data.accessToken, profiles.refreshToken: data.refreshToken};
-      //   localStorage.setItem("profile", JSON.stringify(profiles));
-      //   window.location.href = "/";
-      // }
-
-      // console.log(profile);
     } catch (err) {
-      console.log(err);
       setError(err.response.data.error);
       setLoading(false);
     }

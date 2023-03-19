@@ -17,7 +17,6 @@ import { stateModifier } from "../features/slice";
 import { useSelector } from "react-redux";
 
 const Topbar = ({ login }) => {
-  const auth = useSelector((state) => console.log(state));
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
@@ -40,7 +39,6 @@ const Topbar = ({ login }) => {
     headers: {},
   })
     .then(({ data }) => {
-      console.log(data);
       setIsAdmin(data.isAdmin);
     })
     .catch((err) => console.log(err));

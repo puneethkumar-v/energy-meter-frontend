@@ -32,15 +32,10 @@ const Tenants = () => {
   })
     .then(({ data }) => setIsAdmin(data.isAdmin))
     .catch((err) => console.log(err));
-  // console.log(profile.userId);
 
   const getProfile = async () => {
     const { data } = await API.get("/profile/me");
-    // console.log(data);
-    // setProfile(data);
     return data;
-    // console.log("profile", profile);
-    // console.log(data);
   };
 
   // getProfile();
@@ -50,8 +45,7 @@ const Tenants = () => {
 
   const getAllTenants = async () => {
     try {
-      const { data } = await API.get("/tenant/get-all");
-      console.log("data", data);
+      const { data } = await API.get("/customer/get-all");
       setTenantTable(data);
     } catch (err) {
       console.log(err);
@@ -60,11 +54,9 @@ const Tenants = () => {
   const getMyTenants = async () => {
     try {
       const profile = await getProfile();
-      // console.log("profiles", profile)
       const { data } = await API.post("/tenant/get-by-customer-id", {
         customerId: profile.userId,
       });
-      // console.log("data", data);
 
       setMyTenants(data);
     } catch (err) {
@@ -73,7 +65,6 @@ const Tenants = () => {
   };
 
   useEffect(() => {
-    console.log(isAdmin);
     isAdmin ? getAllTenants() : getMyTenants();
   }, [isAdmin]);
 

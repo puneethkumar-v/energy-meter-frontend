@@ -35,10 +35,7 @@ function App() {
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("profile")));
-    console.log("user exist");
   }, [location]);
-
-  console.log("User from outside useeffect", user);
 
   return (
     <ColorModeContext.Provider value={colorMode}>

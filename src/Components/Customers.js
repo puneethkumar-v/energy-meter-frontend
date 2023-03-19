@@ -35,17 +35,28 @@ const Customers = () => {
 
   const getAllCustomers = async () => {
     try {
-      const { data } = await API.get("/customer/get-all");
+      const { data } = await API.get("/tenant/get-all");
       console.log(data);
       setCustomerTable(data);
+      console.log(data);
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(() => {
-    getAllCustomers();
-  }, []);
+  const getMyCustomers = async () => {
+    try {
+      const { data } = await API.post("/tenant/get-by-customer-id", {
+        customerId: JSON.parse(localStorage.getItem("profile")).userId,
+      });
+      setCustomerTable(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  isAdmin ? getAllCustomers() : getMyCustomers();
+  // useEffect(() => {
+  // }, []);
 
   const columns = [
     // { field: "sl_no", headerName: "SL. NO" },

@@ -42,12 +42,9 @@ const SensorMaster = () => {
   const [allDevices, setAllDevices] = useState([]);
   const [admin, setIsAdmin] = useState(false);
   const [allSensorTypes, setAllSensorTypes] = useState([]);
-  // const user = JSON.parse(localStorage.getItem("profile"));
   const colors = tokens(theme.palette.mode);
 
   const [selected, setSelected] = useState([]);
-  // setSelected(initialValues.numbers.push(selected))
-  // selected.map((sensor) => console.log(sensor.value));
 
   API.interceptors.request.use((req) => {
     if (localStorage.getItem("profile")) {
@@ -67,20 +64,6 @@ const SensorMaster = () => {
   const getAllSensorTypes = async () => {
     try {
       const { data } = await API.get("/sensorType/get");
-      // setAllSensorTypes(data);
-      // console.log("sensorTypes", data[0].sensor_name);
-
-      // data.map((sensor) => {
-      //   setAllSensorTypes(...allSensorTypes, {
-      //     label: sensor.sensor_name,
-      //     value: {
-      //       sensor_idx: sensor.sensor_idx,
-      //       sensor_uom: sensor.sensor_uom,
-      //       sensor_name: sensor.sensor_name,
-      //       sensor_report_group: sensor.sensor_report_group,
-      //     },
-      //   });
-      // });
       let tempArray = [];
       for (let i = 0; i < data.length; i++) {
         const getAllData = {
@@ -95,7 +78,6 @@ const SensorMaster = () => {
         tempArray.push(getAllData);
       }
       setAllSensorTypes(tempArray);
-      // console.log(allSensorTypes);
     } catch (err) {
       console.log(err);
     }
@@ -103,9 +85,7 @@ const SensorMaster = () => {
   const getAllDevices = async () => {
     try {
       const { data } = await API.get("/device/get-all-devices");
-      // console.log(data);
       setAllDevices(data);
-      // console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -129,11 +109,8 @@ const SensorMaster = () => {
         };
         try {
           const { data } = await API.post("/sensorMaster/add", actualValue);
-          console.log(data);
         } catch (err) {
           existingSensors.push(val.value.sensor_name);
-          console.log("existingSensors ");
-          console.log(existingSensors.join(", "));
           setError(
             `${existingSensors.join(", ")}: These sensors already exists`
           );

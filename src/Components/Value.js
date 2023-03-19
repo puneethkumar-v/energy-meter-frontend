@@ -54,14 +54,11 @@ export default function Value() {
     try {
       const tenantDetails = await API.get("/tenant/get-all");
       setTenantCount(tenantDetails.data.length);
-      console.log("tenant", tenantDetails.data.length);
 
       const customerDetails = await API.get("/customer/get-all");
       setCustomerCount(customerDetails.data.length);
-      console.log("customer", customerDetails.data.length);
 
       const deviceDetails = await API.get("/device/get-all-devices");
-      console.log("device", deviceDetails.data.length);
       setDeviceCount(deviceDetails.data.length);
     } catch (err) {
       console.log(err);

@@ -87,10 +87,8 @@ export default function Report() {
     try {
       setLoading(true);
       const { data } = await API.get("/device/get-all-devices");
-      // console.log(data);
       setDevices(data);
 
-      // console.log(data);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -112,7 +110,6 @@ export default function Report() {
   const getDate = (value) => {
     let date = `${new Date(value.$d).getDate()}`;
     let hour = `${new Date(value.$d).getHours()}`;
-    console.log(hour);
     if (date < 10) {
       date = `0${date}`;
     }
@@ -127,14 +124,11 @@ export default function Report() {
   const handlePdfSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    console.log("fromDate", fromDate.$d);
-    console.log("toDate", toDate);
     let obj = {
       fromDate: getDate(fromDate),
       toDate: getDate(toDate),
       deviceId: dropDown,
     };
-    console.log(obj);
     try {
       const res1 = await API.post(
         "/report/between-dates-specific-device",
@@ -146,7 +140,6 @@ export default function Report() {
       // const res2 = await API.post("/csv/between-dates-specific-device", obj, {
       //   responseType: "blob",
       // });
-      console.log(res1.data);
       // window.open(URL.createObjectURL(res2.data));
 
       window.open(URL.createObjectURL(res1.data));
@@ -159,29 +152,17 @@ export default function Report() {
   const handleCsvSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    console.log("fromDate", fromDate.$d);
-    console.log("toDate", toDate);
     let obj = {
       fromDate: getDate(fromDate),
       toDate: getDate(toDate),
       deviceId: dropDown,
     };
-    console.log(obj);
     try {
-      // const res1 = await API.post(
-      //   "/report/between-dates-specific-device",
-      //   obj,
-      //   {
-      //     responseType: "blob", // had to add this one here
-      //   }
-      // );
       const res2 = await API.post("/csv/between-dates-specific-device", obj, {
         responseType: "blob",
       });
-      // console.log(res1.data);
       window.open(URL.createObjectURL(res2.data));
 
-      // window.open(URL.createObjectURL(res1.data));
       setLoading(false);
     } catch (err) {
       console.log(err);

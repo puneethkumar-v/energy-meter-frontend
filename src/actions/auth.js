@@ -8,12 +8,10 @@ export const login = (formData) => async (dispatch) => {
 
     dispatch({ type: AUTH, data });
     // setLoading(false)
-    console.log("Signin successfull");
     // history.push('/dashboard')
     window.location.href = "/";
   } catch (error) {
     // console.log(error?.response?.data?.message)
-    console.log(error?.response?.data?.message);
     //   setLoading(false);
   }
 };
@@ -39,9 +37,7 @@ export const adminregister = (formData) => async (dispatch) => {
     dispatch({ type: CREATE_PROFILE, payload: info });
     window.location.href = "/";
     // history.push('/dashboard')
-    console.log("Sign up successful");
   } catch (error) {
-    console.log(error);
     console.log(error?.response?.data?.message);
     //   setLoading(false);
   }

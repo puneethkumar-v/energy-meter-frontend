@@ -45,17 +45,11 @@ const TenantForm = () => {
     return req;
   });
   const handleFormSubmit = async (values, { resetForm }) => {
-    // console.log(values);
-    // dispatch(adminregister(values));
     try {
       setLoading(true);
-      console.log(values);
-      const { data } = await API.post("/auth/register-tenant", values);
-      // console.log(adminRegister);
-      console.log(data);
+      const { data } = await API.post("/auth/register-customer", values);
       setFormData(data);
       resetForm({ values: initialValues });
-      // localStorage.setItem("profiles", JSON.stringify(formData));
       const emailConfirmation = await API.post(
         "/auth/send-confirmation-email",
         {

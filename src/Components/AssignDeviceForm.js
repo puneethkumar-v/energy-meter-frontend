@@ -36,12 +36,8 @@ const AssignDeviceForm = () => {
   const [formData, setFormData] = useState(initialValues);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  // const [customerId, setCustomerId] = useState();
-  // console.log(customerId);
-  // const user = JSON.parse(localStorage.getItem("profile"));
   const [tenants, setTenants] = useState([]);
   const colors = tokens(theme.palette.mode);
-  // console.log(customerId);
 
   const API = axios.create({ baseURL: process.env.REACT_APP_API });
   API.interceptors.request.use((req) => {
@@ -56,11 +52,9 @@ const AssignDeviceForm = () => {
 
   const getTenants = async () => {
     const result = await API.get("/profile/me");
-    console.log("data", result.data.userId);
     const { data } = await API.post("/tenant/get-by-customer-id", {
       customerId: result.data.userId,
     });
-    console.log(data);
     setTenants(data);
   };
 
@@ -74,10 +68,7 @@ const AssignDeviceForm = () => {
 
   const getMyDevices = async () => {
     const { data } = await API.get("/device/get-my-devices");
-    // devices = await data;
-    // console.log("data", data);
     setDevices(data);
-    // console.log(data);
   };
   useEffect(() => {
     getTenants();
@@ -91,7 +82,6 @@ const AssignDeviceForm = () => {
       const { data } = await assignDeviceToTenant(values);
       resetForm({ values: initialValues });
     } catch (err) {
-      console.log(err);
       setError(err.message);
       resetForm({ values: initialValues });
     }
@@ -100,7 +90,7 @@ const AssignDeviceForm = () => {
   return (
     <Box m="20px" sx={{ height: isNonMobile ? "90vh" : "100%" }}>
       <Header
-        title="ADD CUSTOMER"
+        title="ASSIGN DEVICE"
         subtitle="Fill up the form with the Customer details"
       />
       <Box

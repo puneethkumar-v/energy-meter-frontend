@@ -32,13 +32,9 @@ const Signup = () => {
   // const user = JSON.parse(localStorage.getItem("profile"));
   const colors = tokens(theme.palette.mode);
   const handleFormSubmit = async (values) => {
-    // console.log(values);
-    // dispatch(adminregister(values));
     try {
       setLoading(true);
       const { data } = await API.post("/auth/register-admin", values);
-      // console.log(adminRegister);
-      // localStorage.setItem("profiles", JSON.stringify(data));
       const emailConfirmation = await API.post(
         "/auth/send-confirmation-email",
         {

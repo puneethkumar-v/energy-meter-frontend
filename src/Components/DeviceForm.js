@@ -33,7 +33,7 @@ const DeviceForm = () => {
     return req;
   });
 
-  API.get("/tenant/get-all", { headers: {} })
+  API.get("/customer/get-all", { headers: {} })
     .then(({ data }) => {
       setCustomers(data);
     })
@@ -42,18 +42,6 @@ const DeviceForm = () => {
     headers: {},
   })
     .then(({ data }) => {
-      // data.forEach((device) =>
-      //   arr.push({
-      //     // setCount((count) => count + 1),
-      //     // device.device_id,
-      //     // device.client_topic,
-      //     // device.user.firstName,
-      //     a: "a",
-      //     b: "b",
-      //     c: "c",
-      //   })
-      // );
-      // let user = data[0].user.lastName;
       setTopics(data);
     })
     .catch((err) => console.log(err));
@@ -61,14 +49,10 @@ const DeviceForm = () => {
     try {
       setLoading(true);
       const { data } = await API.post("/device/add", values);
-      // console.log(adminRegister);
-      // localStorage.setItem("profiles", JSON.stringify(data));
       resetForm({ values: initialValues });
-      console.log(data);
       setLoading(false);
       alert("SuccessFully added a device");
     } catch (err) {
-      console.log(err);
       setError(err.message);
       setLoading(false);
     }

@@ -44,17 +44,11 @@ const CustomerForm = () => {
     return req;
   });
   const handleFormSubmit = async (values, { resetForm }) => {
-    // console.log(values);
-    // dispatch(adminregister(values));
     try {
       setLoading(true);
-      console.log("values", values);
-      const { data } = await API.post("auth/register-customer", values);
-      // console.log(adminRegister);
-      console.log("data", data);
+      const { data } = await API.post("auth/register-tenant", values);
       setFormData(data);
       resetForm({ values: initialValues });
-      // localStorage.setItem("profiles", JSON.stringify(formData));
       const emailConfirmation = await API.post(
         "/auth/send-confirmation-email",
         {
@@ -67,7 +61,6 @@ const CustomerForm = () => {
         console.log("Done");
       }
     } catch (err) {
-      console.log(err);
       setError(err.message);
     }
   };
