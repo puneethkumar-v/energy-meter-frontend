@@ -47,6 +47,7 @@ const Tenants = () => {
     try {
       const { data } = await API.get("/customer/get-all");
       setTenantTable(data);
+      console.log("data", data);
     } catch (err) {
       console.log(err);
     }
@@ -99,7 +100,7 @@ const Tenants = () => {
       flex: 1,
     },
     {
-      field: "contactNumber",
+      field: "contact_number",
       headerName: "Contact Number",
       flex: 1,
     },
